@@ -3,3 +3,4 @@ node_modules/
 vendor/
 config/db.php
 public/css
+tests/models/config/db.php
