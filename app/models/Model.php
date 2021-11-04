@@ -86,7 +86,19 @@ abstract class Model
     {
         $query = "SELECT * FROM " . self::getTable() . " WHERE " . $field . " = :" . $field;
         return db::selectOne($query, [$field => $value]);
-    }
+    }  
+    
+    /**
+    * Select many records where field is equal to $value
+    * @param string $field
+    * @param $value
+    * @return array
+    */
+   static public function selectManyWhere(string $field, $value): array
+   {
+       $query = "SELECT * FROM " . self::getTable() . " WHERE " . $field . " = :" . $field;
+       return db::selectMany($query, [$field => $value]);
+   }
 
     /**
      * Delete record by id

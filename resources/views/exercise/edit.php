@@ -2,7 +2,7 @@
 
 use App\Models\Exercise;
 
-$headerText = $params['exercise']->getTitle();
+$headerText = "test";
 $headerClass = "heading managing";
 ?>
 

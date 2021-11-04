@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Models\Exercise;
 
+use Exception;
+
 class ExerciseController extends Controller
 {
     function index()
@@ -13,8 +15,12 @@ class ExerciseController extends Controller
 
     function take()
     {
-        $allExercises = Exercise::selectAll();
-        return $this->view('exercise.take', compact('allExercises'));
+        try{            
+            $allExercises = Exercise::selectAll();       
+            return $this->view('exercise.take', compact('allExercises'));
+        }catch(Exception $e){   
+            return $this->view('exercise.take');
+        }
     }
 
     function manage()
@@ -27,12 +33,6 @@ class ExerciseController extends Controller
         return $this->view('exercise.edit');
     }
 
-
-    function fields()
-    {
-        return $this->view('exercise.fields');
-    }
-
     function fulfillments()
     {
         return $this->view('exercise.fulfillments');
@@ -40,11 +40,15 @@ class ExerciseController extends Controller
 
     function create()
     {
-        $exercise = new Exercise();
-        $name = htmlentities($_POST['exerciseTitle']);
-        $exercise->setTitle($name);
-        $exercise->getStatus()->setId(1);
-        $exercise->create();
-        header('Location: /exercise/fields/' . $exercise->getId());
+        try{
+            $exercise = new Exercise();
+            $name = htmlentities($_POST['exerciseTitle']);
+            $exercise->setTitle($name);
+            $exercise->getStatus()->setId(1);
+            $exercise->create();
+            header('Location: /question/fields/' . $exercise->getId());  
+        }catch(Exception $e){   
+            return $this->view(('exercise.create'));
+        }
     }
 }
