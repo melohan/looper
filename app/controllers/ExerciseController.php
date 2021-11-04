@@ -40,6 +40,11 @@ class ExerciseController extends Controller
 
     function create()
     {
-        return $this->view('exercise.create');
+        $exercise = new Exercise();
+        $name = htmlentities($_POST['exerciseTitle']);
+        $exercise->setTitle($name);
+        $exercise->getStatus()->setId(1);
+        $exercise->create();
+        header('Location: /exercise/fields/' . $exercise->getId());
     }
 }
