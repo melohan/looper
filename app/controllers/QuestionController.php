@@ -9,11 +9,6 @@ use Exception;
 
 class QuestionController extends Controller
 {
-    function index()
-    {
-        return $this->view('question.create');
-    }
-
     function fields($id = null)
     {
         if(is_null($id)){
@@ -24,14 +19,32 @@ class QuestionController extends Controller
             $getExercise = Exercise::selectById($id);
             $getQuestion = Question::selectManyWhere('exercise_id', $id);
             $getType = Type::selectAll();
-            return $this->view(('exercise.fields'),compact('getExercise', 'getQuestion','getType'));
+            return $this->view(('question.fields'),compact('getExercise', 'getQuestion','getType'));
         }catch(Exception $e){   
-            return $this->view(('exercise.fields'));
+            return $this->view(('question.fields'));
         }
     }
     
-    function edit($id)
+    function edit()
     {
-        return $this->view('exercise.edit');
+        return $this->view('question.edit');
+    }
+
+    function create()
+    {
+        try{            
+            $name = htmlentities($_POST['name']);
+            $exerciseId = htmlentities($_POST['exerciseId']);
+            $typeId = htmlentities($_POST['typeId']);
+            
+            $question = new Question();
+            $question->setText($name);
+            $question->getType()->setId($typeId);
+            $question->getExercise()->setId($exerciseId);
+            $question->create();
+            header('Location: /question/fields/' . $exerciseId);
+        }catch(Exception $e){   
+            return $this->view(('question.fields'));
+        }        
     }
 }

@@ -16,21 +16,24 @@ $router = new Router($_SERVER['REQUEST_URI']);
 
 //Home
 $router->get('/', 'App\Controllers\HomeController@index');
+
 $router->post('/', 'App\Controllers\HomeController@index');
 
 //Exercise
 $router->get('/exercise/take', 'App\Controllers\exerciseController@take');
 $router->get('/exercise/new', 'App\Controllers\exerciseController@index');
-$router->get('/exercise/fulfillments', 'App\Controllers\exerciseController@fulfillments');
+$router->get('/exercise/fulfillments/:id', 'App\Controllers\exerciseController@fulfillments');
 $router->get('/exercise/manage', 'App\Controllers\exerciseController@manage');
-$router->get('/exercise/edit', 'App\Controllers\exerciseController@edit');
 
-$router->post('/exercise/edit', 'App\Controllers\exerciseController@edit');
 $router->post('/exercise/create', 'App\Controllers\exerciseController@create');
 $router->post('/exercise/fulfillments', 'App\Controllers\exerciseController@fulfillments');
 
 //Questions
 $router->get('/question/fields/:id', 'App\Controllers\questionController@fields');
+$router->get('/question/edit', 'App\Controllers\questionController@edit');
+
+$router->post('/question/edit', 'App\Controllers\questionController@edit');
+$router->post('/question/create', 'App\Controllers\questionController@create');
 
 //error 404 manage server error
 $router->get('/question/fields/', 'App\Controllers\questionController@fields');
