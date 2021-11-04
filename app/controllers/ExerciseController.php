@@ -13,7 +13,8 @@ class ExerciseController extends Controller
 
     function take()
     {
-        return $this->view('exercise.take');
+        $allExercises = Exercise::selectAll();
+        return $this->view('exercise.take', compact('allExercises'));
     }
 
     function manage()
@@ -39,7 +40,6 @@ class ExerciseController extends Controller
 
     function create()
     {
-        return $this->view('exercise.fields');
+        return $this->view('exercise.create');
     }
-
 }
