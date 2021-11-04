@@ -37,16 +37,17 @@ $headerClass = "heading managing";
     </section>
     <section class="column">
         <h1>New Field</h1>
-        <form action="/exercise/fields" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="h7qdtoWh6/AXCQQfdaupw16QwDJ3SJyW0wQvI7Z6D10LM/l3xR0ke0ZFn8Nes0+LR7onELPPR0XAs7z5kX4M8Q==" />
+        <form action="/question/create" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="h7qdtoWh6/AXCQQfdaupw16QwDJ3SJyW0wQvI7Z6D10LM/l3xR0ke0ZFn8Nes0+LR7onELPPR0XAs7z5kX4M8Q==" />
 
             <div class="field">
                 <label for="field_label">Label</label>
-                <input type="text" name="field[label]" id="field_label" />
+                <input type="text" name="name" id="field_label" />
+                <input type="hidden" name="exerciseId" value="<?= $params['getExercise']['id'] ?>" />
             </div>
 
             <div class="field">
                 <label for="field_value_kind">Value kind</label>
-                <select name="field[value_kind]" id="field_value_kind">
+                <select name="typeId" id="field_value_kind">
                     
                     <?php  if (!empty($params['getType'])) : foreach ($params['getType'] as $key => $value) :  ?>
                     <option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
@@ -56,8 +57,7 @@ $headerClass = "heading managing";
             </div>
 
             <div class="actions">
-                <a class="button" href="#">Create field</a>
-                <!--<input type="submit" name="commit" value="Create Field" data-disable-with="Create Field" />-->
+                <input type="submit" name="commit" value="Create Field" data-disable-with="Create Field" />
             </div>
         </form>
     </section>
