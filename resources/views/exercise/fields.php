@@ -1,5 +1,5 @@
 <?php
-$headerText =  "test";
+$headerText = !empty($params['getExercise']['title']) ? 'Exercise : '.$params['getExercise']['title'] : 'New exercise' ;
 $headerClass = "heading managing";
 ?>
 <div class="row">
@@ -15,16 +15,19 @@ $headerClass = "heading managing";
             </thead>
 
             <tbody>
+                <?php  if (!empty($params['getQuestion'])) : foreach ($params['getQuestion'] as $key => $value) :  ?>
+                   
                 <tr>
-                    <td></td>
-                    <td>single_line</td>
+                    <td><?= $value['text'] ?></td>
                     <td>
-                        <a title="Edit" href="/exercise/edit">
+                        <a title="Edit" href="/question/edit">
                             <i class="fa fa-edit"></i>
                         </a>
                         <a data-confirm="Are you sure?" title="Destroy" rel="nofollow" data-method="delete"><i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
+                <?php endforeach;
+                endif; ?>
             </tbody>
         </table>
 
@@ -44,9 +47,11 @@ $headerClass = "heading managing";
             <div class="field">
                 <label for="field_value_kind">Value kind</label>
                 <select name="field[value_kind]" id="field_value_kind">
-                    <option selected="selected" value="single_line">Single line text</option>
-                    <option value="single_line_list">List of single lines</option>
-                    <option value="multi_line">Multi-line text</option>
+                    
+                    <?php  if (!empty($params['getType'])) : foreach ($params['getType'] as $key => $value) :  ?>
+                    <option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
+                    <?php endforeach;
+                    endif; ?>
                 </select>
             </div>
 
