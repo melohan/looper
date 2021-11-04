@@ -16,7 +16,7 @@ class ExerciseController extends Controller
     function take()
     {
         try{            
-            $allExercises = Exercise::selectAll();       
+            $allExercises = Exercise::selectManyWhere('status_id', 2);       
             return $this->view('exercise.take', compact('allExercises'));
         }catch(Exception $e){   
             return $this->view('exercise.take');
@@ -44,7 +44,7 @@ class ExerciseController extends Controller
             $exercise = new Exercise();
             $name = htmlentities($_POST['exerciseTitle']);
             $exercise->setTitle($name);
-            $exercise->getStatus()->setId(1);
+            $exercise->getStatus()->setId(2);
             $exercise->create();
             header('Location: /question/fields/' . $exercise->getId());  
         }catch(Exception $e){   
