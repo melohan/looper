@@ -22,7 +22,7 @@ $router->post('/', 'App\Controllers\HomeController@index');
 //Exercise
 $router->get('/exercise/take', 'App\Controllers\exerciseController@take');
 $router->get('/exercise/new', 'App\Controllers\exerciseController@index');
-$router->get('/exercise/fulfillments', 'App\Controllers\exerciseController@fulfillments');
+$router->get('/exercise/fulfillments/:id', 'App\Controllers\exerciseController@fulfillments');
 $router->get('/exercise/manage', 'App\Controllers\exerciseController@manage');
 
 $router->post('/exercise/create', 'App\Controllers\exerciseController@create');
