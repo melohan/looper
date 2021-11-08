@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-include_once 'config/db.php';
+include_once './config/db.php';
 
 use PDO;
 use PDOException;
