@@ -36,6 +36,12 @@ npm i
 sass resources\scss:public\css
 ```
 
+Then run the project with
+```shell
+cd public
+php -S localhost:8000
+```
+
 ### Configuration
 
 #### Database
