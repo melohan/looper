@@ -3,15 +3,15 @@
 use App\Models\Answer;
 use PHPUnit\Framework\TestCase;
 
-include_once 'tests/models/config/db.php';
+include "./config/db.php";
 
 class AnswerTest extends TestCase
 {
 
     protected function setUp(): void
     {
-        // Re-execute SCRIPT before each test
-        $command = ' mysql --user="' . TEST_USER . '" --database="' . TEST_DB_NAME . '" --password="' . TEST_PASSWORD . '" < "tests/models/config/' . TEST_SCRIPT . '"';
+        // TODO update db refresh mechanism
+        $command = ' mysql --user="' . USER . '" --database="' . DB_NAME . '" --password="' . PWD . '" < "./database/testDataBase.sql"';
         shell_exec($command);
     }
 
