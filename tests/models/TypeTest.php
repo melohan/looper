@@ -3,22 +3,22 @@
 use App\Models\Type;
 use PHPUnit\Framework\TestCase;
 
-include_once 'tests/models/config/db.php';
+include_once "./config/db.php";
 
 class TypeTest extends TestCase
 {
 
     protected function setUp(): void
     {
-        // Re-execute SCRIPT before each test
-        $command = ' mysql --user="' . TEST_USER . '" --database="' . TEST_DB_NAME . '" --password="' . TEST_PASSWORD . '" < "tests/models/config/' . TEST_SCRIPT . '"';
+        // TODO update db refresh mechanism
+        $command = ' mysql --user="' . USER . '" --database="' . DB_NAME . '" --password="' . PWD . '" < "./database/testDataBase.sql"';
         shell_exec($command);
     }
 
     /**
      * @covers \App\Models\Type::get
      */
-    public function testGet()
+    public function testGet_getFirstTest_returnObject()
     {
         $type = Type::get(1);
         self::assertSame("Single line text", $type->getName());
@@ -27,7 +27,7 @@ class TypeTest extends TestCase
     /**
      * @covers \App\Models\Type::get
      */
-    public function testGetNull()
+    public function testGet_invalidId_returnNull()
     {
         $empty = Type::get(10); // id = 10 doesn't exist must return null
         self::assertNull($empty);
@@ -35,9 +35,9 @@ class TypeTest extends TestCase
 
     /**
      * @covers  \App\Models\Type::edit
-     * @depends testGet
+     * @depends testGet_getFirstTest_returnObject
      */
-    public function testEdit()
+    public function testEdit_editNameAttribute_nameChanged()
     {
         // Get existing type
         $type = Type::get(2);
@@ -49,7 +49,7 @@ class TypeTest extends TestCase
 
     /**
      * @covers  \App\Models\Type::edit
-     * @depends testGet
+     * @depends testGet_getFirstTest_returnObject
      */
     public function testEditThrowException()
     {
@@ -69,9 +69,9 @@ class TypeTest extends TestCase
 
     /**
      * @covers  \App\Models\Type::remove
-     * @depends testGet
+     * @depends testGet_getFirstTest_returnObject
      */
-    public function testRemove()
+    public function testRemove_removeValidId_entryDeleted()
     {
         $type = Type::get(2);
         $type->remove();
@@ -82,7 +82,7 @@ class TypeTest extends TestCase
     /**
      * @covers \App\Models\Type::remove
      */
-    public function testRemoveThrowException()
+    public function testRemove_removeInvalidId_ThrowException()
     {
         $type = Type::get(1);
         // Set up expectation
@@ -97,7 +97,7 @@ class TypeTest extends TestCase
     /**
      * @covers  \App\Models\Type::create
      */
-    public function testCreate()
+    public function testCreate_createValidType_returnLastInsertId()
     {
         $type = new Type();
         $name = 'New Type';
@@ -110,7 +110,7 @@ class TypeTest extends TestCase
     /**
      * @covers \App\Models\Type::create
      */
-    public function testCreateReturnFalse()
+    public function testCreate_createInvalidType_returnFalse()
     {
         $type = new Type();
         $name = 'Single line text';             // already exist, all types must be unique

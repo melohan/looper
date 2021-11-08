@@ -3,23 +3,22 @@
 use App\Models\Question;
 use PHPUnit\Framework\TestCase;
 
-include_once 'tests/models/config/db.php';
+include_once "./config/db.php";
 
 class QuestionTest extends TestCase
 {
 
     protected function setUp(): void
     {
-        // Re-execute SCRIPT before each test
-        $command = ' mysql --user="' . TEST_USER . '" --database="' . TEST_DB_NAME . '" --password="' . TEST_PASSWORD . '" < "tests/models/config/' . TEST_SCRIPT . '"';
+        // TODO update db refresh mechanism
+        $command = ' mysql --user="' . USER . '" --database="' . DB_NAME . '" --password="' . PWD . '" < "./database/testDataBase.sql"';
         shell_exec($command);
     }
-
 
     /**
      * @covers \App\Models\Question::get
      */
-    public function testGet()
+    public function testGet_getFirstQuestion_returnObject()
     {
         $question = Question::get(1);
         self::assertSame("Question 1", $question->getText());
@@ -28,7 +27,7 @@ class QuestionTest extends TestCase
     /**
      * @covers \App\Models\Question::get
      */
-    public function testGetNull()
+    public function testGet_invalidId_returnNull()
     {
         $empty = Question::get(15);     // id = 15 doesn't exist must return null
         self::assertNull($empty);
@@ -36,9 +35,9 @@ class QuestionTest extends TestCase
 
     /**
      * @covers  \App\Models\Question::edit
-     * @depends testGet
+     * @depends testGet_getFirstQuestion_returnObject
      */
-    public function testEditText()
+    public function testEdit_editTextAttribute_textChanged()
     {
         // Get existing Exercise
         $question = Question::get(2);
@@ -53,9 +52,9 @@ class QuestionTest extends TestCase
 
     /**
      * @covers  \App\Models\Question::edit
-     * @depends testGet
+     * @depends testGet_getFirstQuestion_returnObject
      */
-    public function testEditExercise()
+    public function testEdit_editExercise_exerciseIdChanged()
     {
         // Get existing Exercise
         $question = Question::get(2);
@@ -69,9 +68,9 @@ class QuestionTest extends TestCase
 
     /**
      * @covers  \App\Models\Question::edit
-     * @depends testGet
+     * @depends testGet_getFirstQuestion_returnObject
      */
-    public function testEditType()
+    public function testEdit_editQuestionType_typeIdChanged()
     {
         // Get existing Exercise
         $question = Question::get(2);
@@ -85,9 +84,9 @@ class QuestionTest extends TestCase
 
     /**
      * @covers  \App\Models\Question::remove
-     * @depends testGet
+     * @depends testGet_getFirstQuestion_returnObject
      */
-    public function testRemove()
+    public function testRemove_removeValidId_entryDeleted()
     {
         $question = Question::get(2);
         $question->remove();
@@ -98,7 +97,7 @@ class QuestionTest extends TestCase
     /**
      * @covers \App\Models\Question::remove
      */
-    public function testRemoveThrowException()
+    public function testRemove_removeInvalidId_ThrowException()
     {
         $question = Question::get(1);
         // Set up expectation
@@ -113,7 +112,7 @@ class QuestionTest extends TestCase
     /**
      * @covers  \App\Models\Question::create
      */
-    public function testCreate()
+    public function testCreate_createQuestion_returnLastInsertId()
     {
         $question = new Question();
         $name = 'New Exercise';
@@ -121,10 +120,7 @@ class QuestionTest extends TestCase
         $question->getType()->setId(1);
         $question->getExercise()->setId(1);
         $id = $question->create();
-
-
-        // id will be set as 4th record
-        self::assertSame(9, $question->getId());
+        self::assertSame(9, $id);
     }
 
 

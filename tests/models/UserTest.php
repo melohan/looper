@@ -3,22 +3,22 @@
 use App\Models\User;
 use PHPUnit\Framework\TestCase;
 
-include_once 'tests/models/config/db.php';
+include_once "./config/db.php";
 
 class UserTest extends TestCase
 {
 
     protected function setUp(): void
     {
-        // Re-execute SCRIPT before each test
-        $command = ' mysql --user="' . TEST_USER . '" --database="' . TEST_DB_NAME . '" --password="' . TEST_PASSWORD . '" < "tests/models/config/' . TEST_SCRIPT . '"';
+        // TODO update db refresh mechanism
+        $command = ' mysql --user="' . USER . '" --database="' . DB_NAME . '" --password="' . PWD . '" < "./database/testDataBase.sql"';
         shell_exec($command);
     }
 
     /**
      * @covers \App\Models\User::get
      */
-    public function testGet()
+    public function testGet_getFirstUser_returnObject()
     {
         $user = User::get(1);
         self::assertSame("User 1", $user->getName());
@@ -27,7 +27,7 @@ class UserTest extends TestCase
     /**
      * @covers \App\Models\User::get
      */
-    public function testGetNull()
+    public function testGet_invalidId_returnNull()
     {
         $empty = User::get(10); // id = 10 doesn't exist must return null
         self::assertNull($empty);
@@ -35,9 +35,9 @@ class UserTest extends TestCase
 
     /**
      * @covers  \App\Models\User::edit
-     * @depends testGet
+     * @depends testGet_getFirstUser_returnObject
      */
-    public function testEdit()
+    public function testEdit_editNameAttribute_nameChanged()
     {
         // Get existing User
         $user = User::get(2);
@@ -50,9 +50,9 @@ class UserTest extends TestCase
 
     /**
      * @covers  \App\Models\User::remove
-     * @depends testGet
+     * @depends testGet_getFirstUser_returnObject
      */
-    public function testRemove()
+    public function testRemove_removeValidId_entryDeleted()
     {
         $user = User::get(5);
         $user->remove();
@@ -63,7 +63,7 @@ class UserTest extends TestCase
     /**
      * @covers \App\Models\User::remove
      */
-    public function testRemoveThrowException()
+    public function testRemove_removeInvalidId_ThrowException()
     {
         $user = User::get(1);
         // Set up expectation
@@ -78,7 +78,7 @@ class UserTest extends TestCase
     /**
      * @covers  \App\Models\User::create
      */
-    public function testCreate()
+    public function testCreate_createUser_returnLastInsertId()
     {
         $user = new User();
         $name = 'New User';

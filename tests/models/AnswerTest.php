@@ -98,7 +98,7 @@ class AnswerTest extends TestCase
     /**
      * @covers  \App\Models\Exercise::create
      */
-    public function testCreate_createAnswer_getReturnCreatedAnswer()
+    public function testCreate_createAnswer_returnLastInsertId()
     {
         $answer = new Answer();
         $answer->setAnswer('My answer');
@@ -106,7 +106,7 @@ class AnswerTest extends TestCase
         $answer->getQuestion()->setId(3);
         $id = $answer->create();
         // id will be set as 4th record
-        self::assertSame(8, $answer->getId());
+        self::assertSame(8,$id);
     }
 
 
