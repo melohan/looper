@@ -3,22 +3,22 @@
 use App\Models\Status;
 use PHPUnit\Framework\TestCase;
 
-include_once 'tests/models/config/db.php';
+include_once "./config/db.php";
 
 class StatusTest extends TestCase
 {
 
     protected function setUp(): void
     {
-        // Re-execute SCRIPT before each test
-        $command = ' mysql --user="' . TEST_USER . '" --database="' . TEST_DB_NAME . '" --password="' . TEST_PASSWORD . '" < "tests/models/config/' . TEST_SCRIPT . '"';
+        // TODO update db refresh mechanism
+        $command = ' mysql --user="' . USER . '" --database="' . DB_NAME . '" --password="' . PWD . '" < "./database/testDataBase.sql"';
         shell_exec($command);
     }
 
     /**
      * @covers \App\Models\Status::get
      */
-    public function testGet()
+    public function testGet_getFirstStatus_returnObject()
     {
         $status = Status::get(1);
         self::assertSame("Building", $status->getName());
@@ -27,7 +27,7 @@ class StatusTest extends TestCase
     /**
      * @covers \App\Models\Status::get
      */
-    public function testGetNull()
+    public function testGet_invalidId_returnNull()
     {
         $empty = Status::get(10); // id = 10 doesn't exist must return null
         self::assertNull($empty);
@@ -35,9 +35,9 @@ class StatusTest extends TestCase
 
     /**
      * @covers  \App\Models\Status::edit
-     * @depends testGet
+     * @depends testGet_getFirstStatus_returnObject
      */
-    public function testEdit()
+    public function testEdit_editStatusAttribute_statusChanged()
     {
         // Get existing status
         $status = Status::get(2);
@@ -49,9 +49,9 @@ class StatusTest extends TestCase
 
     /**
      * @covers  \App\Models\Status::edit
-     * @depends testGet
+     * @depends testGet_getFirstStatus_returnObject
      */
-    public function testEditThrowException()
+    public function testEdit_editUsedStatusName_throwException()
     {
         // Set up expectation
         self::expectException('PDOException');
@@ -69,9 +69,9 @@ class StatusTest extends TestCase
 
     /**
      * @covers  \App\Models\Status::remove
-     * @depends testGet
+     * @depends testGet_getFirstStatus_returnObject
      */
-    public function testRemove()
+    public function testRemove_removeValidId_entryDeleted()
     {
         $status = Status::get(2);
         $status->remove();
@@ -82,7 +82,7 @@ class StatusTest extends TestCase
     /**
      * @covers \App\Models\Status::remove
      */
-    public function testRemoveThrowException()
+    public function testRemove_removeInvalidId_throwException()
     {
         $status = Status::get(1);
         // Set up expectation
@@ -97,7 +97,7 @@ class StatusTest extends TestCase
     /**
      * @covers  \App\Models\Status::create
      */
-    public function testCreate()
+    public function testCreate_createValidStatus_returnLastInsertId()
     {
         $status = new Status();
         $name = 'New Status';
@@ -110,7 +110,7 @@ class StatusTest extends TestCase
     /**
      * @covers \App\Models\Status::create
      */
-    public function testCreateReturnFalse()
+    public function testCreate_createUsedStatusName_returnFalse()
     {
         $status = new Status();
         $name = 'Building';             // already exist, all statuses must be unique

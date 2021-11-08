@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-include_once '../config/db.php';
+define('RootFolder', str_replace('\\', '/', dirname(dirname(__DIR__))));
+include_once RootFolder . '/config/db.php';
 
 use PDO;
 use PDOException;

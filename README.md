@@ -29,6 +29,8 @@
 ```shell
 git clone https://github.com/melohan/looper.git
 cd looper/
+git checkout develop
+mkdir config
 composer i
 npm i
 sass resources\scss:public\css
@@ -38,7 +40,7 @@ sass resources\scss:public\css
 
 #### Database
 
-Create from the root `config/db.php` and set up your database informations in these constant :
+Create from the root `config/db.php` and set up your database information in these constant :
 
 ```php
 // config/db.php
@@ -61,27 +63,8 @@ php -S localhost:8000
 
 ## Test environment
 
-> In this version, the script in models/testDB.sql will overwrite the contents of the looper database.
->
-> **These constants must have identical values  to those in /config/db.php**
->
->Make sure you are in a safe environment.
-
-Create `/tests/models/config/db.php` and set up your database informations in these constant :
-
-```php
- <?php
-/**
- * /tests/models/config/db.php`
- */
-const TEST_USER = '';
-const TEST_PASSWORD = '';
-const TEST_DB_NAME = '';
-const TEST_SCRIPT = 'testDb.sql';
-
-```
-
-
+Update `config/db.php` with your test environnment, testDataBase.sql will drop current looper database for each
+unitTests.
 
 Execute these following commands:
 > The parent model is abstracte and tested through its children.
