@@ -25,6 +25,7 @@ class Answer extends Model
         $this->question = new Question();
 
         if ($questionId != null && $userId != null && $answer != null) {
+            $this->id = $id;
             $this->user = User::get($userId);
             $this->question = Question::get($questionId);
             $this->answer = $answer;
@@ -90,8 +91,8 @@ class Answer extends Model
 
     public function edit(): void
     {
-        parent::execute("UPDATE answers SET user_id = :user_id, question_id = :question_id WHERE answer = :answer",
-            ['user_id' => $this->getUser()->getId(), 'question_id' => $this->getQuestion()->getId(), 'answer' => $this->getAnswer()]);
+        parent::execute("UPDATE answers SET user_id = :user_id, question_id = :question_id, answer = :answer WHERE id = :id",
+            ['user_id' => $this->getUser()->getId(), 'question_id' => $this->getQuestion()->getId(), 'answer' => $this->answer, 'id' => $this->getId()]);
     }
 
     public function remove(): void
