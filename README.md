@@ -31,12 +31,13 @@ git clone https://github.com/melohan/looper.git
 cd looper/
 git checkout develop
 mkdir config
+touch config/db.php
 composer i
 npm i
 sass resources\scss:public\css
 ```
 
-Then run the project with
+To run looper project 
 ```shell
 cd public
 php -S localhost:8000
