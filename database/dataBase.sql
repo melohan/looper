@@ -149,9 +149,10 @@ INSERT INTO looper.status (name) VALUES ("Closed");
 
 --  ----------------- Exercise insertion ----------------- --
 
-INSERT INTO looper.exercises (title, status_id) VALUES ("Exercice 2 - Histoire", 1);
-INSERT INTO looper.exercises (title, status_id) VALUES ("Exercice 1 - Art et littérature", 1);
+INSERT INTO looper.exercises (title, status_id) VALUES ("Exercice 2 - Histoire", 2);
+INSERT INTO looper.exercises (title, status_id) VALUES ("Exercice 1 - Art et littérature", 2);
 INSERT INTO looper.exercises (title, status_id) VALUES ("Exercice 3 - Géographie", 1);
+INSERT INTO looper.exercises (title, status_id) VALUES ("Exercice 3 - Allemand", 3);
 
 --  ----------------- Questions insertion ----------------- --
 
