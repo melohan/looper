@@ -19,7 +19,7 @@ $headerClass = "heading results";
                 <tr>
                     <td></td>
                     <td>
-                        <a title="Manage fields" href="/exercise/edit"><i class=" fa fa-edit"></i></a>
+                        <a title="Manage fields" href="/question/fields/1"><i class=" fa fa-edit"></i></a>
                         <a data-confirm="Are you sure?" title="Destroy" rel="nofollow" data-method="delete"><i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
@@ -27,14 +27,14 @@ $headerClass = "heading results";
                 <tr>
                     <td>ff</td>
                     <td>
-                        <a title="Manage fields" href="/exercise/edit"><i class=" fa fa-edit"></i></a>
+                        <a title="Manage fields" href="/question/fields/1"><i class=" fa fa-edit"></i></a>
                         <a data-confirm="Are you sure?" title="Destroy" rel="nofollow" data-method="delete"><i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
                 <tr>
                     <td>dasdasdsa</td>
                     <td>
-                        <a title="Manage fields" href="/exercise/edit"><i class=" fa fa-edit"></i></a>
+                        <a title="Manage fields" href="/question/fields/1"><i class=" fa fa-edit"></i></a>
                         <a data-confirm="Are you sure?" title="Destroy" rel="nofollow" data-method="delete"><i class="fa fa-trash"></i></a>
                     </td>
                 </tr>
