@@ -6,7 +6,7 @@ namespace App\Models;
 class Exercise extends Model
 {
 
-    private int    $id;
+    private int $id;
     private string $title;
     private Status $status;
 
@@ -85,6 +85,60 @@ class Exercise extends Model
             $this->id = $result;
             return $this->id;
         }
+    }
+
+    /**
+     * Return true if current exercise has question.
+     * @return bool
+     */
+    public function hasQuestions(): bool
+    {
+        $query = 'SELECT COUNT(answers.question_id) FROM answers GROUP BY answers.question_id HAVING question_id = :question_id';
+        return count(self::select($query, ['question_id' => $this->id])) != 0;
+    }
+
+    /**
+     * Convert associative array to object
+     * @param array $params
+     */
+    public static function toObject(array $params)
+    {
+        $e = new Exercise();
+        $e->status = new Status();
+
+        if (isset($params['id']))
+            $e->id = $params['id'];
+
+        $e->id = $params['id'];
+        $e->title = $params['title'];
+        $e->status = Status::get($params['status_id']);
+        return $e;
+    }
+
+    /**
+     * Convert array of associative arrays to objects
+     * Convert many to
+     * @param array $params
+     * @return array
+     */
+    public static function toObjectMany(array $params)
+    {
+        $result = [];
+        foreach ($params as $item) {
+            $result[] = self::toObject($item);
+        }
+        return $result;
+    }
+
+    /**
+     * Return array of exercises by exercise status
+     * @param ExerciseStatus $status
+     */
+    public static function selectByStatus(int $statusId)
+    {
+        $query = "SELECT * FROM exercises WHERE status_id = :status_id";
+        $selection = parent::select($query, ['status_id' => $statusId]);
+        return self::toObjectMany($selection);
     }
 
 
