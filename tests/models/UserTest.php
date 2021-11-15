@@ -88,4 +88,16 @@ class UserTest extends TestCase
         self::assertSame(6, $user->getId());
     }
 
+    /**
+     * @covers  \App\Models\User::toObject
+     * @depends testGet_getFirstUser_returnObject
+     */
+    public function testToObject_toObjectFromArray_newObject()
+    {
+        $fromGet = User::get(1);
+        $params = User::selectById(1);
+        $fromToObject = User::toObject($params);
+        self::assertEquals($fromGet, $fromToObject);
+    }
+
 }

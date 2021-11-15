@@ -89,5 +89,17 @@ class ExerciseTest extends TestCase
         self::assertSame(4, $id);
     }
 
+    /**
+     * @covers  \App\Models\Exercise::toObject
+     * @depends testGet_getFirstExercise_returnObject
+     */
+    public function testToObject_toObjectFromArray_newObject()
+    {
+        $fromGet = Exercise::get(1);
+        $params = Exercise::selectById(1);
+        $fromToObject = Exercise::toObject($params);
+        self::assertEquals($fromGet, $fromToObject);
+    }
+
 
 }

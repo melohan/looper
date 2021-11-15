@@ -106,8 +106,19 @@ class AnswerTest extends TestCase
         $answer->getQuestion()->setId(3);
         $id = $answer->create();
         // id will be set as 4th record
-        self::assertSame(8,$id);
+        self::assertSame(8, $id);
     }
 
+    /**
+     * @covers  \App\Models\Answer::toObject
+     * @depends testGet_getFirstAnswer_returnObject
+     */
+    public function testToObject_toObjectFromArray_newObject()
+    {
+        $fromGet = Answer::get(1);
+        $params = Answer::selectById(1);
+        $fromToObject = Answer::toObject($params);
+        self::assertEquals($fromGet, $fromToObject);
+    }
 
 }
