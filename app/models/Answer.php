@@ -116,4 +116,43 @@ class Answer extends Model
             return $this->id;
         }
     }
+
+
+    /**
+     * Convert associative array to object
+     * @param array $params
+     */
+    public static function toObject(array $params):Answer|null
+    {
+        if(empty($params)){
+            return null;
+        }
+
+        $o = new Answer();
+        $o->user = new User();
+        $o->question = new Question();
+
+        if (isset($params['id'])) {
+            $o->id = $params['id'];
+        }
+        $o->user = User::get($params['user_id']);
+        $o->question = Question::get($params['question_id']);
+        $o->answer = $params['answer'];
+        return $o;
+    }
+
+    /**
+     * Convert array of associative arrays to objects
+     * Convert many to
+     * @param array $params
+     * @return array
+     */
+    public static function toObjectMany(array $params):array
+    {
+        $result = [];
+        foreach ($params as $item) {
+            $result[] = self::toObject($item);
+        }
+        return $result;
+    }
 }
