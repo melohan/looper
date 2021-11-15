@@ -71,7 +71,7 @@ class Question extends Model
 
     static function get(int $id): Question|null
     {
-        $selection = self::selectById( $id);
+        $selection = self::selectById($id);
         if (!count($selection)) {
             return null;
         }
@@ -101,6 +101,44 @@ class Question extends Model
         }
     }
 
+
+    /**
+     * Convert associative array to object
+     * @param array $params
+     */
+    public static function toObject(array $params): Question|null
+    {
+        if (empty($params)) {
+            return null;
+        }
+
+        $o = new Question();
+        $o->exercise = new Exercise();
+        $o->type = new Type();
+        if (isset($params['id'])) {
+            $o->id = $params['id'];
+        }
+        $o->text = $params['text'];
+        $o->exercise = Exercise::get($params['exercise_id']);
+        $o->type = Type::get($params['type_id']);
+        return $o;
+
+    }
+
+    /**
+     * Convert array of associative arrays to objects
+     * Convert many to
+     * @param array $params
+     * @return array
+     */
+    public static function toObjectMany(array $params): array
+    {
+        $result = [];
+        foreach ($params as $item) {
+            $result[] = self::toObject($item);
+        }
+        return $result;
+    }
 
 }
 

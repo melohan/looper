@@ -75,8 +75,39 @@ class Status extends Model
             $this->id = $result;
             return $this->id;
         }
-
     }
 
+    /**
+     * Convert associative array to object
+     * @param array $params
+     */
+    public static function toObject(array $params): Status|null
+    {
+        if (empty($params)) {
+            return null;
+        }
+        $o = new Status();
+        if (isset($params['id'])) {
+            $o->id = $params['id'];
+        }
+        $o->name = $params['name'];
+
+        return $o;
+    }
+
+    /**
+     * Convert array of associative arrays to objects
+     * Convert many to
+     * @param array $params
+     * @return array
+     */
+    public static function toObjectMany(array $params): array
+    {
+        $result = [];
+        foreach ($params as $item) {
+            $result[] = self::toObject($item);
+        }
+        return $result;
+    }
 
 }
