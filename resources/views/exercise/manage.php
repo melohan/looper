@@ -25,10 +25,10 @@ $headerClass = "heading results";
                             <a title="Be ready for answers" rel="nofollow" data-method="put" href="#"><i
                                         class="fa fa-comment"></i></a>
                         <?php endif; ?>
-                        <a title="Manage fields" href="/question/fields/<?= $exercise->getId(); ?>>"><i
+                        <a title="Manage fields" href="/question/fields/<?= $exercise->getId(); ?>"><i
                                     class=" fa fa-edit"></i></a>
-                        <a data-confirm="Are you sure?" title="Destroy" rel="nofollow" data-method="delete"><i
-                                    class="fa fa-trash"></i></a>
+                        <a data-confirm="Are you sure?" title="Destroy" rel="nofollow" data-method="delete">
+                            <i class="fa fa-trash" data-href="/question/del/10"></i></a>
                     </td>
                 </tr>
             <?php endforeach; ?>
@@ -79,8 +79,8 @@ $headerClass = "heading results";
                         <a title="Show results" href="/answer/result/<?= $exercise->getId(); ?>"><i
                                     class="fa fa-chart-bar"></i></a>
                         <a data-confirm="Are you sure?" title="Destroy" rel="nofollow" data-method="delete"
-                           href="#<?= $exercise->getId(); ?>"><i
-                                    class="fa fa-trash"></i></a>
+                           href="#<?= $exercise->getId(); ?>"><i class="fa fa-trash"
+                                                                 data-href="/question/del/10"></i></a>
                     </td>
                 </tr>
             <?php endforeach; ?>

@@ -16,7 +16,7 @@ class QuestionController extends Controller
         }     
 
         try{            
-            $getExercise = Exercise::selectById($id);
+            $getExercise = Exercise::selectById(intval($id));
             $getQuestion = Question::selectManyWhere('exercise_id', $id);
             $getType = Type::selectAll();
             return $this->view(('question.fields'),compact('getExercise', 'getQuestion','getType'));
