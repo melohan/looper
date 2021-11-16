@@ -13,4 +13,20 @@ $(document).ready(function () {
     }
     return false;
   });
+  
+  /**
+   * change status
+   */
+  document.querySelectorAll('a[data-method="put"]').forEach(item => {
+    item.addEventListener("click", function () { 
+      if (!confirm(item.dataset.confirm)) return false;
+
+      $.post($(this).data("href"), { id: $(this).data("val"),status: $(this).data("status") }, function () {
+        window.location.href = '/';
+      }).fail(function (result) {
+
+        alert(result.text());
+      });
+    })
+  });
 });
