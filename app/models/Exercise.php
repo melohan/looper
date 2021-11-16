@@ -98,39 +98,6 @@ class Exercise extends Model
     }
 
     /**
-     * Convert associative array to object
-     * @param array $params
-     */
-    public static function toObject(array $params)
-    {
-        $e = new Exercise();
-        $e->status = new Status();
-
-        if (isset($params['id']))
-            $e->id = $params['id'];
-
-        $e->id = $params['id'];
-        $e->title = $params['title'];
-        $e->status = Status::get($params['status_id']);
-        return $e;
-    }
-
-    /**
-     * Convert array of associative arrays to objects
-     * Convert many to
-     * @param array $params
-     * @return array
-     */
-    public static function toObjectMany(array $params)
-    {
-        $result = [];
-        foreach ($params as $item) {
-            $result[] = self::toObject($item);
-        }
-        return $result;
-    }
-
-    /**
      * Return array of exercises by exercise status
      * @param ExerciseStatus $status
      */
