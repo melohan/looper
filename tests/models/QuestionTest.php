@@ -123,5 +123,17 @@ class QuestionTest extends TestCase
         self::assertSame(9, $id);
     }
 
+    /**
+     * @covers  \App\Models\Exercise::toObject
+     * @depends testGet_getFirstQuestion_returnObject
+     */
+    public function testToObject_toObjectFromArray_newObject()
+    {
+        $fromGet = Question::get(1);
+        $params = Question::selectById(1);
+        $fromToObject = Question::toObject($params);
+        self::assertEquals($fromGet, $fromToObject);
+    }
+
 
 }

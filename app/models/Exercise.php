@@ -3,6 +3,8 @@
 namespace App\Models;
 
 
+use function PHPUnit\Framework\isEmpty;
+
 class Exercise extends Model
 {
 
@@ -108,5 +110,39 @@ class Exercise extends Model
         return self::toObjectMany($selection);
     }
 
+    /**
+     * Convert associative array to object
+     * @param array $params
+     */
+    public static function toObject(array $params): Exercise|null
+    {
+        if (empty($params)) {
+            return null;
+        }
+        $o = new Exercise();
+        $o->status = new Status();
+
+        if (isset($params['id']))
+            $o->id = $params['id'];
+
+        $o->title = $params['title'];
+        $o->status = Status::get($params['status_id']);
+        return $o;
+    }
+
+    /**
+     * Convert array of associative arrays to objects
+     * Convert many to
+     * @param array $params
+     * @return array
+     */
+    public static function toObjectMany(array $params): array
+    {
+        $result = [];
+        foreach ($params as $item) {
+            $result[] = self::toObject($item);
+        }
+        return $result;
+    }
 
 }

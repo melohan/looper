@@ -119,4 +119,16 @@ class TypeTest extends TestCase
         self::assertFalse($result);
     }
 
+    /**
+     * @covers  \App\Models\Type::toObject
+     * @depends testGet_getFirstTest_returnObject
+     */
+    public function testToObject_toObjectFromArray_newObject()
+    {
+        $fromGet = Type::get(1);
+        $params = Type::selectById(1);
+        $fromToObject = Type::toObject($params);
+        self::assertEquals($fromGet, $fromToObject);
+    }
+
 }

@@ -119,5 +119,16 @@ class StatusTest extends TestCase
         self::assertFalse($result);
     }
 
+    /**
+     * @covers  \App\Models\Status::toObject
+     * @depends testGet_getFirstStatus_returnObject
+     */
+    public function testToObject_toObjectFromArray_newObject()
+    {
+        $fromGet = Status::get(1);
+        $params = Status::selectById(1);
+        $fromToObject = Status::toObject($params);
+        self::assertEquals($fromGet, $fromToObject);
+    }
 
 }
