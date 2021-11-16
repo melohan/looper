@@ -11,20 +11,20 @@ class QuestionController extends Controller
 {
     function fields($id = null)
     {
-        if(is_null($id)){
+        if (is_null($id)) {
             return $this->view(('page.error404'));
-        }     
+        }
 
-        try{            
+        try {
             $getExercise = Exercise::selectById($id);
             $getQuestion = Question::selectManyWhere('exercise_id', $id);
             $getType = Type::selectAll();
-            return $this->view(('question.fields'),compact('getExercise', 'getQuestion','getType'));
-        }catch(Exception $e){   
+            return $this->view(('question.fields'), compact('getExercise', 'getQuestion', 'getType'));
+        } catch (Exception $e) {
             return $this->view(('question.fields'));
         }
     }
-    
+
     function edit()
     {
         return $this->view('question.edit');
@@ -32,19 +32,31 @@ class QuestionController extends Controller
 
     function create()
     {
-        try{            
+        try {
             $name = htmlentities($_POST['name']);
             $exerciseId = htmlentities($_POST['exerciseId']);
             $typeId = htmlentities($_POST['typeId']);
-            
+
             $question = new Question();
             $question->setText($name);
             $question->getType()->setId($typeId);
             $question->getExercise()->setId($exerciseId);
             $question->create();
             header('Location: /question/fields/' . $exerciseId);
-        }catch(Exception $e){   
+        } catch (Exception $e) {
             return $this->view(('question.fields'));
-        }        
+        }
+    }
+    function delete()
+    {
+        try {
+            if (isset($_POST['id'])) {
+                $id = intval($_POST['id']);
+                $question = Question::get($id);
+                $question->remove();
+            }
+        } catch (Exception $e) {
+            return "error";
+        }
     }
 }
