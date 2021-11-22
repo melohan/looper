@@ -21,8 +21,8 @@ class Exercise extends Model
     public function __construct(int $id = null, string $title = null, int $statusId = null)
     {
         $this->status = new Status();
-
-        if ($id != null && $title != null) {
+        // TODO correct id != null OR
+        if ($id != null || $title != null) {
             $this->id = $id;
             $this->title = $title;
             $this->status = Status::get($statusId);
@@ -75,7 +75,7 @@ class Exercise extends Model
 
     public function edit(): void
     {
-        $this->update($this->id, ['title' => $this->title]);
+        $this->update($this->id, ['title' => $this->title, 'status_id' => $this->status->getId()]);
     }
 
     public function create(): int|false
@@ -95,7 +95,7 @@ class Exercise extends Model
      */
     public static function toObject(array $params): Exercise|null
     {
-        if(empty($params)){
+        if (empty($params)) {
             return null;
         }
         $o = new Exercise();
@@ -122,6 +122,12 @@ class Exercise extends Model
             $result[] = self::toObject($item);
         }
         return $result;
+    }
+
+    public function getQuestions(): array|null
+    {
+        $questions = Question::selectManyWhere('exercise_id', $this->id);
+        return  Question::toObjectMany($questions);
     }
 
 }
