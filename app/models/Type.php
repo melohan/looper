@@ -13,7 +13,7 @@ class Type extends Model
      * @param int|null $id
      * @param string|null $name
      */
-    public function __construct(int $id = null, string $name = null)
+    public git function __construct(int $id = null, string $name = null)
     {
         if ($id != null && $name != null) {
             $this->id = $id;
@@ -107,6 +107,12 @@ class Type extends Model
             $result[] = self::toObject($item);
         }
         return $result;
+    }
+
+    // todo Correct function name
+    public static function allTypes():array{
+       $all = Type::selectAll();
+       return self::toObjectMany($all);
     }
 
 
