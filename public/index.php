@@ -30,10 +30,13 @@ $router->post('/exercise/fulfillments', 'App\Controllers\exerciseController@fulf
 
 //Questions
 $router->get('/question/fields/:id', 'App\Controllers\questionController@fields');
-$router->get('/question/edit', 'App\Controllers\questionController@edit');
+$router->get('/question/edit/:id', 'App\Controllers\questionController@edit');
 
-$router->post('/question/edit', 'App\Controllers\questionController@edit');
+$router->post('/question/edit/:id', 'App\Controllers\questionController@edit');
 $router->post('/question/create', 'App\Controllers\questionController@create');
+$router->post('/question/delete/', 'App\Controllers\questionController@delete');
+$router->post('/question/update', 'App\Controllers\questionController@update');
+
 
 //error 404 manage server error
 $router->get('/question/fields/', 'App\Controllers\questionController@fields');
