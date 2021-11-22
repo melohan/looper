@@ -16,10 +16,10 @@ class QuestionController extends Controller
         }
 
         try {
-            $getExercise = Exercise::selectById($id);
-            $getQuestion = Question::selectManyWhere('exercise_id', $id);
-            $getType = Type::selectAll();
-            return $this->view(('question.fields'), compact('getExercise', 'getQuestion', 'getType'));
+            $types = Type::allTypes();
+
+            $exercise = Exercise::get(intval($id));
+            return $this->view(('question.fields'), compact('exercise', 'types'));
         } catch (Exception $e) {
             return $this->view(('question.fields'));
         }
@@ -47,6 +47,7 @@ class QuestionController extends Controller
             return $this->view(('question.fields'));
         }
     }
+
     function delete()
     {
         try {

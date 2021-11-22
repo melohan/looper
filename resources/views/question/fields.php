@@ -1,6 +1,10 @@
 <?php
 $headerText = !empty($params['getExercise']['title']) ? 'Exercise : <b><a href="/question/fields/' . $params['getExercise']['id'] . '">' . $params['getExercise']['title'] . '</a></b>' : 'New exercise';
 $headerClass = "heading managing";
+
+$exercise = $params['exercise'];
+$types = $params['types'];
+
 ?>
 <div class="row">
     <section class="column">
@@ -15,15 +19,16 @@ $headerClass = "heading managing";
             </thead>
 
             <tbody>
-                <?php if (!empty($params['getQuestion'])) : foreach ($params['getQuestion'] as $key => $value) : ?>
+                <?php if (!empty($exercise->getQuestions())) : foreach ($exercise->getQuestions() as $key => $question) : ?>
 
                         <tr>
-                            <td><?= $value['text'] ?></td>
+                            <td><?= $question->getText(); ?></td>
+                            <td><?= $question->getType()->getName(); ?></td>
                             <td>
                                 <a title="Edit" href="/question/edit">
                                     <i class="fa fa-edit"></i>
                                 </a>
-                                <a data-confirm="Are you sure?" title="Destroy" rel="nofollow" data-method="delete"><i class="fa fa-trash" data-href="/question/delete/" data-val="<?= $value['id'] ?>"></i></a>
+                                <a data-confirm="Are you sure?" title="Destroy" rel="nofollow" data-method="delete"><i class="fa fa-trash" data-href="/question/delete/" data-val="<?= $question->getId(); ?>"></i></a>
                             </td>
                         </tr>
                 <?php endforeach;
@@ -42,15 +47,15 @@ $headerClass = "heading managing";
             <div class="field">
                 <label for="field_label">Label</label>
                 <input type="text" name="name" id="field_label" />
-                <input type="hidden" name="exerciseId" value="<?= $params['getExercise']['id'] ?>" />
+                <input type="hidden" name="exerciseId" value="<?= $exercise->getId(); ?>" />
             </div>
 
             <div class="field">
                 <label for="field_value_kind">Value kind</label>
                 <select name="typeId" id="field_value_kind">
 
-                    <?php if (!empty($params['getType'])) : foreach ($params['getType'] as $key => $value) : ?>
-                            <option value="<?= $value['id'] ?>"><?= $value['name'] ?></option>
+                    <?php if (!empty($types)) : foreach ($types as $key => $type) : ?>
+                            <option value="<?= $type->getId(); ?>"><?= $type->getName(); ?></option>
                     <?php endforeach;
                     endif; ?>
                 </select>
