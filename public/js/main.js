@@ -21,11 +21,12 @@ $(document).ready(function () {
     item.addEventListener("click", function () { 
       if (!confirm(item.dataset.confirm)) return false;
 
-      $.post($(this).data("href"), { id: $(this).data("val"),status: $(this).data("status") }, function () {
-        window.location.href = '/';
+      $.post($(this).data("href"), { id: $(
+        this).data("val"),status: $(this).data("status") }, function () {
+       (window.location.href.includes("question")) && (item.dataset.method ="put") ? window.location.href = '/' : location.reload();
       }).fail(function (result) {
 
-        alert(result.text());
+        alert("Got error");
       });
     })
   });
