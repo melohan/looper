@@ -13,7 +13,7 @@ class Type extends Model
      * @param int|null $id
      * @param string|null $name
      */
-    public git function __construct(int $id = null, string $name = null)
+    public function __construct(int $id = null, string $name = null)
     {
         if ($id != null && $name != null) {
             $this->id = $id;
