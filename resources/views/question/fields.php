@@ -36,7 +36,7 @@ $types = $params['types'];
             </tbody>
         </table>
 
-        <a data-confirm="Are you sure? You won&#39;t be able to further edit this exercise" class="button" rel="nofollow" data-method="put" href="/"><i class="fa fa-comment"></i>
+        <a data-confirm="Are you sure? You won&#39;t be able to further edit this exercise" class="button" rel="nofollow" data-method="put" data-href="/exercise/update" data-val="<?= $exercise->getid() ?>" data-status="ANSWERING"><i class="fa fa-comment"></i>
             Complete and be ready for answers</a>
 
     </section>

@@ -76,14 +76,11 @@ class Exercise extends Model
     public function edit(): void
     {
         $this->update($this->id, ['title' => $this->title, 'status_id' => $this->status->getId()]);
-<<<<<<< HEAD
-=======
     }
 
     public function editStatus(): void
     {
         $this->update($this->id, ['status_id' => $this->status->getId()]);
->>>>>>> feature/manage
     }
 
     public function create(): int|false
@@ -152,15 +149,9 @@ class Exercise extends Model
         }
         return $result;
     }
-<<<<<<< HEAD
-
     public function getQuestions(): array|null
     {
         $questions = Question::selectManyWhere('exercise_id', $this->id);
         return  Question::toObjectMany($questions);
     }
-
 }
-=======
-}
->>>>>>> feature/manage
