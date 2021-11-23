@@ -49,7 +49,7 @@ class ExerciseController extends Controller
             $exercise = new Exercise();
             $name = htmlentities($_POST['exerciseTitle']);
             $exercise->setTitle($name);
-            $exercise->getStatus()->setId(ExerciseStatus::ANSWERING);
+            $exercise->getStatus()->setId(ExerciseStatus::BUILDING);
             $exercise->create();
             header('Location: /question/fields/' . $exercise->getId());
         } catch (Exception $e) {
