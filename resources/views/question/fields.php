@@ -28,7 +28,7 @@ $types = $params['types'];
                                 <a title="Edit" href="/question/edit">
                                     <i class="fa fa-edit"></i>
                                 </a>
-                                <a data-confirm="Are you sure?" title="Destroy" rel="nofollow" data-method="delete"><i class="fa fa-trash" data-href="/question/delete/" data-val="<?= $question->getId(); ?>"></i></a>
+                                <a data-confirm="Are you sure?" title="Destroy" rel="nofollow" data-method="delete" data-href="/question/delete/" data-val="<?= $question->getId(); ?>"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                 <?php endforeach;
