@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Exercise;
 
 use App\models\ExerciseStatus;
+use App\Models\Status;
 use Exception;
 
 class ExerciseController extends Controller
@@ -48,11 +49,52 @@ class ExerciseController extends Controller
             $exercise = new Exercise();
             $name = htmlentities($_POST['exerciseTitle']);
             $exercise->setTitle($name);
-            $exercise->getStatus()->setId(2);
+            $exercise->getStatus()->setId(ExerciseStatus::ANSWERING);
             $exercise->create();
             header('Location: /question/fields/' . $exercise->getId());
         } catch (Exception $e) {
             return $this->view(('exercise.create'));
+        }
+    }
+    function update()
+    {
+        try {
+            if (isset($_POST['id']) && isset($_POST['status'])) {
+                $id = intval($_POST['id']);
+                $status = new Status();
+                $exercise = new Exercise();
+                //TODO constant(F::class.'::BAR');
+                switch ($_POST['status']) {
+                    case 'ANSWERING':
+                        $exercise->getStatus()->setId(ExerciseStatus::ANSWERING);
+                        break;
+
+                    case 'BUILDING':
+                        $exercise->getStatus()->setId(ExerciseStatus::BUILDING);
+                        break;
+
+                    case 'CLOSED':
+                        $exercise->getStatus()->setId(ExerciseStatus::CLOSED);
+                        break;
+                }
+                $exercise->setId($id);
+                $exercise->editStatus();
+            }
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
+    function delete()
+    {
+        try {
+            if (isset($_POST['id'])) {
+                $exercise = new Exercise();
+                $id = intval($_POST['id']);
+                $exercise = Exercise::get($id);
+                $exercise->remove();
+            }
+        } catch (Exception $e) {
+            return "error";
         }
     }
 }

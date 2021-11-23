@@ -75,7 +75,12 @@ class Exercise extends Model
 
     public function edit(): void
     {
-        $this->update($this->id, ['title' => $this->title]);
+        $this->update($this->id, ['title' => $this->title, 'status_id' => $this->status->getId()]);
+    }
+
+    public function editStatus(): void
+    {
+        $this->update($this->id, ['status_id' => $this->status->getId()]);
     }
 
     public function create(): int|false
@@ -144,5 +149,4 @@ class Exercise extends Model
         }
         return $result;
     }
-
 }
