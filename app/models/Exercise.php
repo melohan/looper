@@ -76,6 +76,14 @@ class Exercise extends Model
     public function edit(): void
     {
         $this->update($this->id, ['title' => $this->title, 'status_id' => $this->status->getId()]);
+<<<<<<< HEAD
+=======
+    }
+
+    public function editStatus(): void
+    {
+        $this->update($this->id, ['status_id' => $this->status->getId()]);
+>>>>>>> feature/manage
     }
 
     public function create(): int|false
@@ -87,6 +95,27 @@ class Exercise extends Model
             $this->id = $result;
             return $this->id;
         }
+    }
+
+    /**
+     * Return true if current exercise has question.
+     * @return bool
+     */
+    public function hasQuestions(): bool
+    {
+        $query = 'SELECT COUNT(answers.question_id) FROM answers GROUP BY answers.question_id HAVING question_id = :question_id';
+        return count(self::select($query, ['question_id' => $this->id])) != 0;
+    }
+
+    /**
+     * Return array of exercises by exercise status
+     * @param ExerciseStatus $status
+     */
+    public static function selectByStatus(int $statusId)
+    {
+        $query = "SELECT * FROM exercises WHERE status_id = :status_id";
+        $selection = parent::select($query, ['status_id' => $statusId]);
+        return self::toObjectMany($selection);
     }
 
     /**
@@ -123,6 +152,7 @@ class Exercise extends Model
         }
         return $result;
     }
+<<<<<<< HEAD
 
     public function getQuestions(): array|null
     {
@@ -131,3 +161,6 @@ class Exercise extends Model
     }
 
 }
+=======
+}
+>>>>>>> feature/manage

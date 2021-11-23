@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Models\Exercise;
 
+use App\models\ExerciseStatus;
+use App\Models\Status;
 use Exception;
 
 class ExerciseController extends Controller
@@ -15,17 +17,20 @@ class ExerciseController extends Controller
 
     function take()
     {
-        try{            
-            $allExercises = Exercise::selectManyWhere('status_id', 2);       
+        try {
+            $allExercises = Exercise::selectManyWhere('status_id', 2);
             return $this->view('exercise.take', compact('allExercises'));
-        }catch(Exception $e){   
+        } catch (Exception $e) {
             return $this->view('exercise.take');
         }
     }
 
     function manage()
     {
-        return $this->view('exercise.manage');
+        $building = Exercise::selectByStatus(ExerciseStatus::BUILDING);
+        $answering = Exercise::selectByStatus(ExerciseStatus::ANSWERING);
+        $closed = Exercise::selectByStatus(ExerciseStatus::CLOSED);
+        return $this->view('exercise.manage', compact('building', 'answering', 'closed'));
     }
 
     function edit()
@@ -40,15 +45,56 @@ class ExerciseController extends Controller
 
     function create()
     {
-        try{
+        try {
             $exercise = new Exercise();
             $name = htmlentities($_POST['exerciseTitle']);
             $exercise->setTitle($name);
-            $exercise->getStatus()->setId(2);
+            $exercise->getStatus()->setId(ExerciseStatus::ANSWERING);
             $exercise->create();
-            header('Location: /question/fields/' . $exercise->getId());  
-        }catch(Exception $e){   
+            header('Location: /question/fields/' . $exercise->getId());
+        } catch (Exception $e) {
             return $this->view(('exercise.create'));
+        }
+    }
+    function update()
+    {
+        try {
+            if (isset($_POST['id']) && isset($_POST['status'])) {
+                $id = intval($_POST['id']);
+                $status = new Status();
+                $exercise = new Exercise();
+                //TODO constant(F::class.'::BAR');
+                switch ($_POST['status']) {
+                    case 'ANSWERING':
+                        $exercise->getStatus()->setId(ExerciseStatus::ANSWERING);
+                        break;
+
+                    case 'BUILDING':
+                        $exercise->getStatus()->setId(ExerciseStatus::BUILDING);
+                        break;
+
+                    case 'CLOSED':
+                        $exercise->getStatus()->setId(ExerciseStatus::CLOSED);
+                        break;
+                }
+                $exercise->setId($id);
+                $exercise->editStatus();
+            }
+        } catch (Exception $e) {
+            return $e;
+        }
+    }
+    function delete()
+    {
+        try {
+            if (isset($_POST['id'])) {
+                $exercise = new Exercise();
+                $id = intval($_POST['id']);
+                $exercise = Exercise::get($id);
+                $exercise->remove();
+            }
+        } catch (Exception $e) {
+            return "error";
         }
     }
 }
