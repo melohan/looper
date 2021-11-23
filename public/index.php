@@ -28,6 +28,7 @@ $router->get('/exercise/manage', 'App\Controllers\exerciseController@manage');
 $router->post('/exercise/create', 'App\Controllers\exerciseController@create');
 $router->post('/exercise/fulfillments', 'App\Controllers\exerciseController@fulfillments');
 $router->post('/exercise/update', 'App\Controllers\exerciseController@update');
+$router->post('/exercise/delete/', 'App\Controllers\exerciseController@delete');
 
 //Questions
 $router->get('/question/fields/:id', 'App\Controllers\questionController@fields');
