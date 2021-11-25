@@ -109,5 +109,11 @@ class Type extends Model
         return $result;
     }
 
+    // todo Correct function name
+    public static function allTypes():array{
+       $all = Type::selectAll();
+       return self::toObjectMany($all);
+    }
+
 
 }

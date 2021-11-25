@@ -7,7 +7,7 @@ $(document).ready(function () {
       if (!confirm(item.dataset.confirm)) return false;
 
       $.post($(this).data("href"), { id: $(this).data("val") }, function () {
-        //location.reload();
+        location.reload();
       }).fail(function (result) {
 
         alert("Got error");
