@@ -5,46 +5,58 @@ namespace App\Controllers;
 use App\Models\Exercise;
 use App\Models\Question;
 use App\Models\Type;
-use Exception;
 
 class QuestionController extends Controller
 {
-    function fields($id = null)
+    function fields($id)
     {
-        if(is_null($id)){
-            return $this->view(('page.error404'));
-        }     
-
-        try{            
-            $getExercise = Exercise::selectById($id);
-            $getQuestion = Question::selectManyWhere('exercise_id', $id);
-            $getType = Type::selectAll();
-            return $this->view(('question.fields'),compact('getExercise', 'getQuestion','getType'));
-        }catch(Exception $e){   
-            return $this->view(('question.fields'));
-        }
+        $types = Type::allTypes();
+        $exercise = Exercise::get($id);
+        return $this->view(('question.fields'), compact('exercise', 'types'));
     }
-    
-    function edit()
+
+    // Display edition form
+    function edit($id)
     {
-        return $this->view('question.edit');
+        $types = Type::allTypes();
+        $question = Question::get(intval($id));
+        return $this->view(('question.edit'), compact('question', 'types'));
+    }
+
+    // Update post from edit page
+    function update($id)
+    {
+        if (isset($_POST['field']['label']) && isset($_POST['typeId'])) {
+            $typeId = $_POST['typeId'];
+            $text = $_POST['field']['label'];
+            $question = Question::get($id);
+            $question->getType()->setId($typeId);
+            $question->setText($text);
+            $question->edit();
+        }
+        header('Location: /question/fields/' . $question->getExercise()->getId());
     }
 
     function create()
     {
-        try{            
-            $name = htmlentities($_POST['name']);
-            $exerciseId = htmlentities($_POST['exerciseId']);
-            $typeId = htmlentities($_POST['typeId']);
-            
-            $question = new Question();
-            $question->setText($name);
-            $question->getType()->setId($typeId);
-            $question->getExercise()->setId($exerciseId);
-            $question->create();
-            header('Location: /question/fields/' . $exerciseId);
-        }catch(Exception $e){   
-            return $this->view(('question.fields'));
-        }        
+        $name = $_POST['name'];
+        $exerciseId = $_POST['exerciseId'];
+        $typeId = $_POST['typeId'];
+        $question = new Question();
+        $question->setText($name);
+        $question->getType()->setId($typeId);
+        $question->getExercise()->setId($exerciseId);
+        $question->create();
+        header('Location: /question/fields/' . $exerciseId);
+    }
+
+    // Used with delete button and js
+    function delete()
+    {
+        if (isset($_POST['id'])) {
+            $id = intval($_POST['id']);
+            $question = Question::get($id);
+            $question->remove();
+        }
     }
 }

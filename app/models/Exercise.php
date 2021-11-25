@@ -21,8 +21,8 @@ class Exercise extends Model
     public function __construct(int $id = null, string $title = null, int $statusId = null)
     {
         $this->status = new Status();
-
-        if ($id != null && $title != null) {
+        // TODO correct id != null OR
+        if ($id != null || $title != null) {
             $this->id = $id;
             $this->title = $title;
             $this->status = Status::get($statusId);
@@ -75,7 +75,12 @@ class Exercise extends Model
 
     public function edit(): void
     {
-        $this->update($this->id, ['title' => $this->title]);
+        $this->update($this->id, ['title' => $this->title, 'status_id' => $this->status->getId()]);
+    }
+
+    public function editStatus(): void
+    {
+        $this->update($this->id, ['status_id' => $this->status->getId()]);
     }
 
     public function create(): int|false
@@ -90,12 +95,33 @@ class Exercise extends Model
     }
 
     /**
+     * Return true if current exercise has question.
+     * @return bool
+     */
+    public function hasQuestions(): bool
+    {
+        $query = 'SELECT COUNT(answers.question_id) FROM answers GROUP BY answers.question_id HAVING question_id = :question_id';
+        return count(self::select($query, ['question_id' => $this->id])) != 0;
+    }
+
+    /**
+     * Return array of exercises by exercise status
+     * @param ExerciseStatus $status
+     */
+    public static function selectByStatus(int $statusId)
+    {
+        $query = "SELECT * FROM exercises WHERE status_id = :status_id";
+        $selection = parent::select($query, ['status_id' => $statusId]);
+        return self::toObjectMany($selection);
+    }
+
+    /**
      * Convert associative array to object
      * @param array $params
      */
     public static function toObject(array $params): Exercise|null
     {
-        if(empty($params)){
+        if (empty($params)) {
             return null;
         }
         $o = new Exercise();
@@ -123,5 +149,9 @@ class Exercise extends Model
         }
         return $result;
     }
-
+    public function getQuestions(): array|null
+    {
+        $questions = Question::selectManyWhere('exercise_id', $this->id);
+        return  Question::toObjectMany($questions);
+    }
 }

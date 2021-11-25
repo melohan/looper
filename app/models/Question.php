@@ -26,7 +26,7 @@ class Question extends Model
         $this->exercise = new Exercise();
         $this->type = new Type();
 
-        if ($id != null && $text != null && $exercise_id != null && $type_id != null) {
+        if ($id != null && $exercise_id != null && $type_id != null) {
             $this->id = $id;
             $this->text = $text;
             $this->exercise = Exercise::get($exercise_id);
@@ -81,7 +81,6 @@ class Question extends Model
     public function edit(): void
     {
         $this->update($this->id, ['text' => $this->text, 'exercise_id' => $this->exercise->getId(), 'type_id' => $this->type->getId()]);
-
     }
 
     public function remove(): void
@@ -122,7 +121,6 @@ class Question extends Model
         $o->exercise = Exercise::get($params['exercise_id']);
         $o->type = Type::get($params['type_id']);
         return $o;
-
     }
 
     /**
@@ -139,6 +137,4 @@ class Question extends Model
         }
         return $result;
     }
-
 }
-

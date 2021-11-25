@@ -27,13 +27,18 @@ $router->get('/exercise/manage', 'App\Controllers\exerciseController@manage');
 
 $router->post('/exercise/create', 'App\Controllers\exerciseController@create');
 $router->post('/exercise/fulfillments', 'App\Controllers\exerciseController@fulfillments');
+$router->post('/exercise/delete/', 'App\Controllers\exerciseController@delete');
 
 //Questions
 $router->get('/question/fields/:id', 'App\Controllers\questionController@fields');
-$router->get('/question/edit', 'App\Controllers\questionController@edit');
+$router->get('/question/edit/:id', 'App\Controllers\questionController@edit');
 
-$router->post('/question/edit', 'App\Controllers\questionController@edit');
+$router->post('/question/edit/:id', 'App\Controllers\questionController@edit');
 $router->post('/question/create', 'App\Controllers\questionController@create');
+$router->post('/question/delete/', 'App\Controllers\questionController@delete');
+
+$router->post('/question/update/:id', 'App\Controllers\questionController@update');
+
 
 //error 404 manage server error
 $router->get('/question/fields/', 'App\Controllers\questionController@fields');

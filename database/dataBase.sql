@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `looper`.`exercises` (
     CONSTRAINT `fk_exercises_status1`
     FOREIGN KEY (`status_id`)
     REFERENCES `looper`.`status` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION)
     ENGINE = InnoDB;
 
@@ -79,7 +79,7 @@ CREATE TABLE IF NOT EXISTS `looper`.`questions` (
     CONSTRAINT `fk_questions_exercises`
     FOREIGN KEY (`exercise_id`)
     REFERENCES `looper`.`exercises` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
     CONSTRAINT `fk_questions_types1`
     FOREIGN KEY (`type_id`)
@@ -117,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `looper`.`answers` (
     CONSTRAINT `fk_answers_questions1`
     FOREIGN KEY (`question_id`)
     REFERENCES `looper`.`questions` (`id`)
-    ON DELETE NO ACTION
+    ON DELETE CASCADE
     ON UPDATE NO ACTION,
     CONSTRAINT `fk_answers_users1`
     FOREIGN KEY (`user_id`)
