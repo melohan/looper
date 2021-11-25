@@ -63,20 +63,7 @@ class ExerciseController extends Controller
                 $id = intval($_POST['id']);
                 $status = new Status();
                 $exercise = new Exercise();
-                //TODO constant(F::class.'::BAR');
-                switch ($_POST['status']) {
-                    case 'ANSWERING':
-                        $exercise->getStatus()->setId(ExerciseStatus::ANSWERING);
-                        break;
-
-                    case 'BUILDING':
-                        $exercise->getStatus()->setId(ExerciseStatus::BUILDING);
-                        break;
-
-                    case 'CLOSED':
-                        $exercise->getStatus()->setId(ExerciseStatus::CLOSED);
-                        break;
-                }
+                $exercise->getStatus()->setId($_POST['status']);
                 $exercise->setId($id);
                 $exercise->editStatus();
             }
