@@ -9,33 +9,42 @@ use Exception;
 
 class QuestionController extends Controller
 {
-    function fields($id = null)
+    function fields($id)
     {
-        if (is_null($id)) {
-            return $this->view(('page.error404'));
-        }
-
-        try {
-            $types = Type::allTypes();
-
-            $exercise = Exercise::get(intval($id));
-            return $this->view(('question.fields'), compact('exercise', 'types'));
-        } catch (Exception $e) {
-            return $this->view(('question.fields'));
-        }
+        $types = Type::allTypes();
+        $exercise = Exercise::get($id);
+        return $this->view(('question.fields'), compact('exercise', 'types'));
     }
 
-    function edit()
+    function edit($id)
     {
-        return $this->view('question.edit');
+        $types = Type::allTypes();
+        $question = Question::get(intval($id));
+        return $this->view(('question.edit'), compact('question', 'types'));
     }
+
+
+    function update($id)
+    {
+        if (isset($_POST['field']['label']) && isset($_POST['typeId'])) {
+            $typeId = $_POST['typeId'];
+            $text = $_POST['field']['label'];
+            $question = Question::get($id);
+            $question->getType()->setId($typeId);
+            $question->setText($text);
+            $question->edit();
+            header('Location: /question/fields/' . $id);
+        }
+    //    header('Location: /question/fields/' . $id);
+    }
+
 
     function create()
     {
         try {
-            $name = htmlentities($_POST['name']);
-            $exerciseId = htmlentities($_POST['exerciseId']);
-            $typeId = htmlentities($_POST['typeId']);
+            $name = $_POST['name'];
+            $exerciseId = $_POST['exerciseId'];
+            $typeId = $_POST['typeId'];
 
             $question = new Question();
             $question->setText($name);

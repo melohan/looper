@@ -25,7 +25,7 @@ $types = $params['types'];
                             <td><?= $question->getText(); ?></td>
                             <td><?= $question->getType()->getName(); ?></td>
                             <td>
-                                <a title="Edit" href="/question/edit">
+                                <a title="Edit" href="/question/edit/<?= $question->getId(); ?>">
                                     <i class="fa fa-edit"></i>
                                 </a>
                                 <a data-confirm="Are you sure?" title="Destroy" rel="nofollow" data-method="delete" data-href="/question/delete/" data-val="<?= $question->getId(); ?>"><i class="fa fa-trash"></i></a>
