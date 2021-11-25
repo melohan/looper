@@ -5,7 +5,6 @@ namespace App\Controllers;
 use App\Models\Exercise;
 use App\Models\Question;
 use App\Models\Type;
-use Exception;
 
 class QuestionController extends Controller
 {
@@ -16,6 +15,7 @@ class QuestionController extends Controller
         return $this->view(('question.fields'), compact('exercise', 'types'));
     }
 
+    // Display edition form
     function edit($id)
     {
         $types = Type::allTypes();
@@ -23,7 +23,7 @@ class QuestionController extends Controller
         return $this->view(('question.edit'), compact('question', 'types'));
     }
 
-
+    // Update post from edit page
     function update($id)
     {
         if (isset($_POST['field']['label']) && isset($_POST['typeId'])) {
@@ -33,40 +33,30 @@ class QuestionController extends Controller
             $question->getType()->setId($typeId);
             $question->setText($text);
             $question->edit();
-            header('Location: /question/fields/' . $id);
         }
-    //    header('Location: /question/fields/' . $id);
+        header('Location: /question/fields/' . $id);
     }
-
 
     function create()
     {
-        try {
-            $name = $_POST['name'];
-            $exerciseId = $_POST['exerciseId'];
-            $typeId = $_POST['typeId'];
-
-            $question = new Question();
-            $question->setText($name);
-            $question->getType()->setId($typeId);
-            $question->getExercise()->setId($exerciseId);
-            $question->create();
-            header('Location: /question/fields/' . $exerciseId);
-        } catch (Exception $e) {
-            return $this->view(('question.fields'));
-        }
+        $name = $_POST['name'];
+        $exerciseId = $_POST['exerciseId'];
+        $typeId = $_POST['typeId'];
+        $question = new Question();
+        $question->setText($name);
+        $question->getType()->setId($typeId);
+        $question->getExercise()->setId($exerciseId);
+        $question->create();
+        header('Location: /question/fields/' . $exerciseId);
     }
 
+    // Used with delete button and js
     function delete()
     {
-        try {
-            if (isset($_POST['id'])) {
-                $id = intval($_POST['id']);
-                $question = Question::get($id);
-                $question->remove();
-            }
-        } catch (Exception $e) {
-            return "error";
+        if (isset($_POST['id'])) {
+            $id = intval($_POST['id']);
+            $question = Question::get($id);
+            $question->remove();
         }
     }
 }
