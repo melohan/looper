@@ -7,6 +7,7 @@ $types = $params['types'];
 
 ?>
 <div class="row">
+    <?php if(!is_null($exercise)): ?>
     <section class="column">
         <h1>Fields</h1>
         <table class="records">
@@ -66,4 +67,5 @@ $types = $params['types'];
             </div>
         </form>
     </section>
+    <?php endif; ?>
 </div>

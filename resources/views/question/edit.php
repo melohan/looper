@@ -11,6 +11,7 @@ $types = $params['types'];
 
 <h1>Editing Field</h1>
 
+<?php if(!is_null($question)): ?>
 <form action="/question/update/<?= $question->getId(); ?>" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden"
                                                                              value="&#x2713;"/>
 
@@ -36,3 +37,4 @@ $types = $params['types'];
         <input type="submit" name="commit" value="Update Field" data-disable-with="Update Field"/>
     </div>
 </form>
+<?php endif; ?>
