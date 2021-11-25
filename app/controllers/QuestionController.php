@@ -34,7 +34,7 @@ class QuestionController extends Controller
             $question->setText($text);
             $question->edit();
         }
-        header('Location: /question/fields/' . $id);
+        header('Location: /question/fields/' . $question->getExercise()->getId());
     }
 
     function create()
