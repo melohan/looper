@@ -61,7 +61,6 @@ class ExerciseController extends Controller
         try {
             if (isset($_POST['id']) && isset($_POST['status'])) {
                 $id = intval($_POST['id']);
-                $status = new Status();
                 $exercise = new Exercise();
                 $exercise->getStatus()->setId($_POST['status']);
                 $exercise->setId($id);
