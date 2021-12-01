@@ -72,20 +72,43 @@ class Answer extends Model
         return new Answer($selection['id'], $selection['question_id'], $selection['user_id'], $selection['answer']);;
     }
 
+
     /**
-     * get answers by question and user id
+     * Get one Answer by question and user id
      * @param int $firstId
      * @param int $scndId
      * @return Answer|null
      */
     static public function getAnswers(int $questionId, int $userId): Answer|null
     {
+
         $selection = parent::select("SELECT * FROM answers WHERE answers.question_id = :question_id AND answers.user_id = :user_id", ['question_id' => $questionId, 'user_id' => $userId]);
         // select is based on select many so we need to access to [0]
         if (!count($selection)) {
             return null;
         }
-        return new Answer($selection['id'], $selection['question_id'], $selection['user_id'], $selection['answer']);
+        return new Answer($selection[0]['id'], $selection[0]['question_id'], $selection[0]['user_id'], $selection[0]['answer']);
+    }
+
+
+    /**
+     * Get Answers
+     * @return Answer|null
+     */
+    static public function getAnswersBy(array $params): array|null
+    {
+        // concatenate in and condition if params is not empty
+        $keys = array_keys($params);
+        $and = implode(' ', array_map(function ($item) {
+            return 'AND ' . $item . ' = :' . $item;
+        }, $keys));
+        var_dump($and);
+        $selection = parent::select("SELECT * FROM answers WHERE 1 ".$and, $params);
+        var_dump($selection);
+        if (!count($selection)) {
+            return null;
+        }
+        return self::toObjectMany($selection);
     }
 
 
@@ -122,9 +145,9 @@ class Answer extends Model
      * Convert associative array to object
      * @param array $params
      */
-    public static function toObject(array $params):Answer|null
+    public static function toObject(array $params): Answer|null
     {
-        if(empty($params)){
+        if (empty($params)) {
             return null;
         }
 
@@ -147,7 +170,7 @@ class Answer extends Model
      * @param array $params
      * @return array
      */
-    public static function toObjectMany(array $params):array
+    public static function toObjectMany(array $params): array
     {
         $result = [];
         foreach ($params as $item) {
