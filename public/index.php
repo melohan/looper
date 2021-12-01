@@ -45,9 +45,10 @@ $router->post('/question/update/:id', 'App\Controllers\questionController@update
 $router->get('/question/fields/', 'App\Controllers\questionController@fields');
 
 // Answers
-$router->get('/answer/answer', 'App\Controllers\answerController@answer');
-$router->get('/answer/answerUser', 'App\Controllers\answerController@answerUser');
-$router->get('/answer/result', 'App\Controllers\answerController@result');
+// TODO update paths in views
+$router->get('/answer/answer/:id', 'App\Controllers\answerController@question');
+$router->get('/answer/answerUser/:id', 'App\Controllers\answerController@user');
+$router->get('/answer/result/:id', 'App\Controllers\answerController@exercise');
 
 
 //Etc

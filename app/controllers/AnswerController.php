@@ -4,19 +4,20 @@ namespace App\Controllers;
 
 class AnswerController extends Controller
 {
-    function answer()
+    function user()
     {
-        return $this->view('answer.answer');
+        return $this->view('answer.user');
     }
 
-    function answerUser()
+    function question()
     {
-        return $this->view('answer.answerUser');
+        return $this->view('answer.question');
     }
 
-    function result()
+    function exercise()
     {
-        return $this->view('answer.result');
+        return $this->view('answer.exercise');
     }
+
 
 }
