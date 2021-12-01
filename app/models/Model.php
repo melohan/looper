@@ -75,6 +75,15 @@ abstract class Model
         return $res === false ? [] : $res;
     }
 
+    /**
+     * Check if an entry exist by his id
+     * @param int $id
+     * @return bool
+     */
+    public static function exist(int $id): bool
+    {
+        return count(self::selectById($id))>0;
+    }
 
     /**
      * Select one record where field is equal to $value
