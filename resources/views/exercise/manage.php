@@ -45,7 +45,7 @@ $headerClass = "heading results";
                     <tr>
                         <td><?= $exercise->getTitle(); ?></td>
                         <td>
-                            <a title="Show results" href="/answer/result/<?= $exercise->getId(); ?>"><i class="fa fa-chart-bar"></i></a>
+                            <a title="Show results" href="/answer/exercise/<?= $exercise->getId(); ?>"><i class="fa fa-chart-bar"></i></a>
                             <a title="Close" rel="nofollow" data-method="put" data-href="/exercise/update" data-val="<?= $exercise->getid() ?>" data-status="3" data-confirm="Are you sure?"><i class="fa fa-minus-circle"></i></a>
                         </td>
                     </tr>
@@ -69,7 +69,7 @@ $headerClass = "heading results";
                     <tr>
                         <td><?= $exercise->getTitle(); ?></td>
                         <td>
-                            <a title="Show results" href="/answer/result/<?= $exercise->getId(); ?>"><i class="fa fa-chart-bar"></i></a>
+                            <a title="Show results" href="/answer/exercise/<?= $exercise->getId(); ?>"><i class="fa fa-chart-bar"></i></a>
                             <a data-confirm="Are you sure?" title="Destroy" rel="nofollow" data-method="delete" data-href="/exercise/delete/" data-val="<?= $exercise->getid() ?>"><i class="fa fa-trash"></i></a>
                         </td>
                     </tr>
