@@ -119,13 +119,18 @@ class Answer extends Model
      * @param int $exerciseId
      * @return array|null
      */
-    static public function getAnswersByExercise(int $exerciseId): array|null
+    static public function getAnswersByExercise(int $exerciseId, array $params = []): array|null
     {
         $query = "SELECT answers.id, answers.question_id, answers.user_id, answers.answer FROM answers
                   INNER JOIN questions ON questions.id = answers.question_id
                   INNER JOIN exercises ON exercises.id = questions.exercise_id
-                  WHERE exercises.id = :id";
-        $selection = parent::select($query, ['id' => $exerciseId]);
+                  WHERE exercises.id = :exerciseId";
+        $keys = array_keys($params);
+        $and = implode(' ', array_map(function ($item) {
+            return 'AND ' . $item . ' = :' . $item;
+        }, $keys));
+        $params['exerciseId'] = $exerciseId;
+        $selection = parent::select($query . " " . $and, $params);
         return self::toObjectMany($selection);
     }
 

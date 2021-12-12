@@ -27,7 +27,7 @@ $lastId = '';
         <tbody>
         <?php foreach ($answers as $answer): ?>
             <tr>
-                <td><a href="/answer/user/<?= $answer->getId(); ?>"><?= $answer->getUser()->getName(); ?></a></td>
+                <td><a href="/answer/user/<?= $answer->getId(); ?>/exercise/<?= $exercise->getId(); ?>"><?= $answer->getUser()->getName(); ?></a></td>
                 <td class="answer">
                     <?php if (empty($answer->getAnswer())): ?>
                         <i class="fa fa-times empty"></i>

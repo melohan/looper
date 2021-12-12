@@ -17,7 +17,7 @@ $answers = $params['answers'];
         <tbody>
         <?php foreach ($answers as $answer): ?>
             <tr>
-                <td><a href="/answer/user/<?= $answer->getUser()->getId(); ?>"><?= $answer->getUser()->getName(); ?></a>
+                <td><a href="/answer/user/<?= $answer->getId(); ?>/exercise/<?= $exercise->getId(); ?>"><?= $answer->getUser()->getName(); ?></a>
                 </td>
                 <td><?= $answer->getAnswer(); ?></td>
             </tr>
