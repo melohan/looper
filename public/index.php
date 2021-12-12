@@ -47,7 +47,7 @@ $router->get('/question/fields/', 'App\Controllers\questionController@fields');
 // Answers
 // TODO update paths in views
 $router->get('/answer/question/:id', 'App\Controllers\answerController@question');
-$router->get('/answer/user/:id', 'App\Controllers\answerController@user');
+$router->get('/answer/user/:userId/exercise/:exerciseId', 'App\Controllers\answerController@user');
 $router->get('/answer/exercise/:id', 'App\Controllers\answerController@exercise');
 
 
