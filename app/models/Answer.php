@@ -60,6 +60,7 @@ class Answer extends Model
         return $this->id;
     }
 
+
     /*     Operations      */
 
 
@@ -90,6 +91,43 @@ class Answer extends Model
         return new Answer($selection[0]['id'], $selection[0]['question_id'], $selection[0]['user_id'], $selection[0]['answer']);
     }
 
+    /**
+     * Get Exercises by answers fields
+     * @param array $params
+     * @return Exercise|null
+     */
+    static public function getExercisesBy(array $params): Exercise|null
+    {
+        // concatenate in and condition if params is not empty
+        $keys = array_keys($params);
+        $and = implode(' ', array_map(function ($item) {
+            return 'AND ' . $item . ' = :' . $item;
+        }, $keys));
+        $selection = parent::select(
+            "SELECT exercises.id, exercises.title, exercises.status_id FROM  answers
+                    INNER JOIN questions ON questions.id = answers.question_id
+                    INNER JOIN exercises ON exercises.id = questions.exercise_id
+                    WHERE 1 " . $and . " GROUP BY exercises.id", $params);
+        if (!count($selection)) {
+            return null;
+        }
+        return Exercise::toObject($selection[0]);
+    }
+
+    /**
+     * Return Answers array objects by exercise id
+     * @param int $exerciseId
+     * @return array|null
+     */
+    static public function getAnswersByExercise(int $exerciseId): array|null
+    {
+        $query = "SELECT answers.id, answers.question_id, answers.user_id, answers.answer FROM answers
+                  INNER JOIN questions ON questions.id = answers.question_id
+                  INNER JOIN exercises ON exercises.id = questions.exercise_id
+                  WHERE exercises.id = :id";
+        $selection = parent::select($query, ['id' => $exerciseId]);
+        return self::toObjectMany($selection);
+    }
 
     /**
      * Get Answers
@@ -102,7 +140,7 @@ class Answer extends Model
         $and = implode(' ', array_map(function ($item) {
             return 'AND ' . $item . ' = :' . $item;
         }, $keys));
-        $selection = parent::select("SELECT * FROM answers WHERE 1 ".$and, $params);
+        $selection = parent::select("SELECT * FROM answers WHERE 1 " . $and, $params);
         if (!count($selection)) {
             return null;
         }
