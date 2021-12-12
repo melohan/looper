@@ -129,7 +129,6 @@ class Exercise extends Model
 
         if (isset($params['id']))
             $o->id = $params['id'];
-
         $o->title = $params['title'];
         $o->status = Status::get($params['status_id']);
         return $o;

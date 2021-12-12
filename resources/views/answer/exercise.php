@@ -1,24 +1,33 @@
 <?php
-$headerText = "<span class='exercise-label'>Exercise: <a href='/answer/result'>voila</a></span>";
+$exercise = $params['exercise'];
+$headerText = ($exercise != null) ? "<span class='exercise-label'><a href='/answer/exercise/" . $exercise->getId() . "'>" . $exercise->getTitle() . "</a></span>":"";
+
 $headerClass = "heading results";
 
 $answers = $params['answers'];
 const DOUBLE_FILLED = 50;
+$lastId = '';
 ?>
-<?php if (count($answers) > 0): ?>
+<?php if (is_array($answers) && count($answers) > 0): ?>
     <table>
         <thead>
         <tr>
             <th>Take</th>
+
             <?php foreach ($answers as $answer): ?>
-                <th><a href="/answer/question/1"><?= $answer->getQuestion()->getText(); ?></a></th>
+                <?php if ($lastId != $answer->getQuestion()->getId()): ?>
+                    <th>
+                        <a href="/answer/question/<?= $answer->getQuestion()->getId(); ?>"><?= $answer->getQuestion()->getText(); ?></a>
+                    </th>
+                <?php endif; ?>
+                <?php $lastId = $answer->getQuestion()->getId(); ?>
             <?php endforeach; ?>
         </tr>
         </thead>
         <tbody>
         <?php foreach ($answers as $answer): ?>
             <tr>
-                <td><a href="/answer/user/<?= $answer->getId(); ?>"><?= $answer->getUser()->getName(); ?>></a></td>
+                <td><a href="/answer/user/<?= $answer->getId(); ?>"><?= $answer->getUser()->getName(); ?></a></td>
                 <td class="answer">
                     <?php if (empty($answer->getAnswer())): ?>
                         <i class="fa fa-times empty"></i>
