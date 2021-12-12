@@ -60,6 +60,7 @@ class Answer extends Model
         return $this->id;
     }
 
+
     /*     Operations      */
 
 
@@ -90,6 +91,15 @@ class Answer extends Model
         return new Answer($selection[0]['id'], $selection[0]['question_id'], $selection[0]['user_id'], $selection[0]['answer']);
     }
 
+    static public function getAnswersByExercise(int $exerciseId): array|null
+    {
+        $query = "SELECT answers.id, answers.question_id, answers.user_id, answers.answer FROM answers
+                  INNER JOIN questions ON questions.id = answers.question_id
+                  INNER JOIN exercises ON exercises.id = questions.exercise_id
+                  WHERE exercises.id = :id";
+        $selection = parent::select($query, ['id' => $exerciseId]);
+        return self::toObjectMany($selection);
+    }
 
     /**
      * Get Answers
@@ -102,7 +112,7 @@ class Answer extends Model
         $and = implode(' ', array_map(function ($item) {
             return 'AND ' . $item . ' = :' . $item;
         }, $keys));
-        $selection = parent::select("SELECT * FROM answers WHERE 1 ".$and, $params);
+        $selection = parent::select("SELECT * FROM answers WHERE 1 " . $and, $params);
         if (!count($selection)) {
             return null;
         }
