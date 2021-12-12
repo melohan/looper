@@ -102,9 +102,7 @@ class Answer extends Model
         $and = implode(' ', array_map(function ($item) {
             return 'AND ' . $item . ' = :' . $item;
         }, $keys));
-        var_dump($and);
         $selection = parent::select("SELECT * FROM answers WHERE 1 ".$and, $params);
-        var_dump($selection);
         if (!count($selection)) {
             return null;
         }

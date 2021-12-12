@@ -1,32 +1,35 @@
 <?php
 $headerText = "<span class='exercise-label'>Exercise: <a href='/answer/result'>voila</a></span>";
 $headerClass = "heading results";
+
+$answers = $params['answers'];
+const DOUBLE_FILLED = 50;
 ?>
-<table>
-    <thead>
+<?php if (count($answers) > 0): ?>
+    <table>
+        <thead>
         <tr>
             <th>Take</th>
-            <th><a href="/answer/question/1">la réponse d</a></th>
+            <?php foreach ($answers as $answer): ?>
+                <th><a href="/answer/question/1"><?= $answer->getQuestion()->getText(); ?></a></th>
+            <?php endforeach; ?>
         </tr>
-    </thead>
-
-    <tbody>
-        <tr>
-            <td><a href="/answer/user/1">2021-09-01 13:30:53 UTC</a></td>
-            <td class="answer"><i class="fa fa-check short"></i></td>
-        </tr>
-        <tr>
-            <td><a href="/answer/user/1">2021-09-05 14:42:31 UTC</a></td>
-            <td class="answer"><i class="fa fa-times empty"></i></td>
-        </tr>
-        <tr>
-            <td><a href="/answer/user/1">2021-09-08 11:49:36 UTC</a></td>
-            <td class="answer"><i class="fa fa-check-double filled"></i></td>
-        </tr>
-        <tr>
-            <td><a href="/answer/user/1">2021-09-19 07:45:39 UTC</a></td>
-            <td class="answer"><i class="fa fa-times empty"></i></td>
-        </tr>
-     
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+        <?php foreach ($answers as $answer): ?>
+            <tr>
+                <td><a href="/answer/user/<?= $answer->getId(); ?>"><?= $answer->getUser()->getName(); ?>></a></td>
+                <td class="answer">
+                    <?php if (empty($answer->getAnswer())): ?>
+                        <i class="fa fa-times empty"></i>
+                    <?php elseif (strlen($answer->getAnswer()) > DOUBLE_FILLED): ?>
+                        <i class="fa fa-check-double filled"></i>
+                    <?php else: ?>
+                        <i class="fa fa-check short"></i>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+        </tbody>
+    </table>
+<?php endif; ?>
