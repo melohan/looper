@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Models\Answer;
+
 class AnswerController extends Controller
 {
     function user()
@@ -14,9 +16,10 @@ class AnswerController extends Controller
         return $this->view('answer.question');
     }
 
-    function exercise()
+    function exercise($id)
     {
-        return $this->view('answer.exercise');
+        $answers = Answer::exist($id) ? Answer::getAnswersBy(['question_id' => $id]) : [];
+        return $this->view('answer.exercise', compact('answers'));
     }
 
 
