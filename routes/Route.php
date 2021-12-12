@@ -34,7 +34,7 @@ class Route
     {
         $path = preg_replace('#:([\w]+)#', '([^/]+)', $this->path);
         $pathToMatch = "#^$path$#";
-        
+
         if (preg_match($pathToMatch, $url, $matches)) {
             $this->matches = $matches;
             return true;
@@ -52,6 +52,14 @@ class Route
         $params = explode('@', $this->action);
         $controller = new $params[0]();
         $method = $params[1];
-        return isset($this->matches[1]) ? $controller->$method($this->matches[1]) : $controller->$method();
+
+        // For 2 params in GET method
+        if (isset($this->matches) && count($this->matches) > 3) {
+            return $controller->$method($this->matches[1], $this->matches[2]);
+        // For 1 params in GET method
+        } elseif (isset($this->matches[1])) {
+            return $controller->$method($this->matches[1]);
+        }
+        return $controller->$method();
     }
 }
