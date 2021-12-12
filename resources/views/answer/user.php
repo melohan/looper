@@ -1,9 +1,16 @@
 <?php
-$headerText = "<span class='exercise-label'>Exercise: <a href='/answer/result'>voila</a></span>";
+$exercise = $params['exercise'];
+$headerText = ($exercise != null) ? "<span class='exercise-label'><a href='/answer/exercise/" . $exercise->getId() . "'>" . $exercise->getTitle() . "</a></span>" : "";
 $headerClass = "heading results";
+$answers = $params['answers'];
 ?>
-<h1>2021-09-01 13:30:53 UTC</h1>
-<dl class="answer">
-    <dt>la réponse d</dt>
-    <dd>d</dd>
-</dl>
+<?php if (is_array($answers) && count($answers) > 0): ?>
+    <h1><?= $answers[0]->getUser()->getName(); ?></h1>
+
+    <?php foreach ($answers as $answer): ?>
+        <dl class="answer">
+            <dt><?= $answer->getQuestion()->getText(); ?></dt>
+            <dd><?= $answer->getAnswer(); ?></dd>
+        </dl>
+    <?php endforeach; ?>
+<?php endif; ?>
