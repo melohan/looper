@@ -5,6 +5,9 @@ $headerClass = "heading managing";
 $exercise = $params['exercise'];
 $types = $params['types'];
 
+$headerText = (!is_null($exercise) && $exercise->getTitle() != null) ? "Exercise: <span class='exercise-label'><a href='/question/fields/" . $exercise->getId() . "'>" . $exercise->getTitle() . "</a></span>" : "New exercise";
+
+
 ?>
 <div class="row">
     <?php if (!is_null($exercise)) : ?>

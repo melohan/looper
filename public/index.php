@@ -2,7 +2,7 @@
 
 use Router\Router;
 
-const FOLDERROOT = './';
+const FOLDERROOT = '../';
 
 require(realpath(FOLDERROOT . '/vendor/autoload.php'));
 
