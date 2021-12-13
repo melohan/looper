@@ -6,7 +6,7 @@ $answers = $params['answers'];
 $headerClass = "heading results";
 const DOUBLE_FILLED = 50;
 $lastId = '';
-$users = \App\Models\User::getByExercise(2);
+$users = \App\Models\User::getByExercise($exercise->getId());
 ?>
 <?php if (is_array($answers) && count($answers) > 0): ?>
     <table>
@@ -27,8 +27,9 @@ $users = \App\Models\User::getByExercise(2);
         <?php foreach ($users as $user): ?>
             <tr>
                 <td>
-                    <a href="/answer/user/<?= $user->getId(); ?>/exercise/<?= $exercise->getId(); ?>"><?= $answer->getUser()->getName(); ?></a>
+                    <a href="/answer/user/<?= $user->getId(); ?>/exercise/<?= $exercise->getId(); ?>"><?= $user->getName(); ?></a>
                 </td>
+
                 <?php $answers = \App\Models\Answer::getAnswersByExercise($exercise->getId(), ['user_id' => $user->getId()]); ?>
                 <?php foreach ($answers as $answer): ?>
                     <td class="answer">
