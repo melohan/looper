@@ -8,7 +8,8 @@ $headerClass = "heading answering";
     <h1>Your take</h1>
     <p>Bookmark this page, it's yours. You'll be able to come back later to finish.</p>
 
-    <form action="/answer/fulfillments/<?= $exercise->getId(); ?>" accept-charset="UTF-8" method="post">
+    <form action="/answer/exercise/<?= $exercise->getId(); ?>/update/<?= $params['userId'] ?>"
+          accept-charset="UTF-8" method="post">
 
         <div class="field">
             <?php foreach ($answers as $answer): ?>
