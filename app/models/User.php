@@ -110,5 +110,21 @@ class User extends Model
         return $result;
     }
 
+    /**
+     * Return array object of users by exercise id
+     * @param int $exerciseId
+     * @return array
+     */
+    public static function getByExercise(int $exerciseId)
+    {
+        $query = "SELECT users.id, users.name FROM answers
+                  INNER JOIN questions ON answers.question_id = questions.id
+                  iNNER JOIN users ON answers.user_id = users.id
+                  WHERE questions.exercise_id = :exerciseId
+                  GROUP BY users.id
+                  ORDER BY users.name DESC";
+        $selection = self::select($query, ['exerciseId' => $exerciseId]);
+        return self::toObjectMany($selection);
+    }
 
 }

@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Models\Exercise;
 
 use App\models\ExerciseStatus;
+use App\Models\Question;
 use App\Models\Status;
 use Exception;
 
@@ -38,9 +39,12 @@ class ExerciseController extends Controller
         return $this->view('exercise.edit');
     }
 
-    function fulfillments()
+    function fulfillments(int $id)
     {
-        return $this->view('exercise.fulfillments');
+        if (Exercise::exist($id)) {
+            $exercise = Exercise::get($id);
+        }
+        return $this->view('exercise.fulfillments', compact('exercise'));
     }
 
     function create()
@@ -56,6 +60,7 @@ class ExerciseController extends Controller
             return $this->view(('exercise.create'));
         }
     }
+
     function update()
     {
         try {
@@ -70,6 +75,7 @@ class ExerciseController extends Controller
             return $e;
         }
     }
+
     function delete()
     {
         try {
