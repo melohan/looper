@@ -14,20 +14,20 @@ $headerClass = "heading answering";
             <?php foreach ($exercise->getQuestions() as $question): ?>
                 <label for="fulfillment_answers_attributes__value"><?= $question->getText(); ?></label>
                 <input type="hidden" value="<?= $question->getId(); ?>"
-                       name="fulfillment[answers][][questionId]"
-                       id="fulfillment_answers_attributes__field_id" />
+                       name="fulfillment[answers_attributes][][questionId]"
+                />
                 <?php if ($question->getType()->getId() == \App\models\QuestionType::SINGLE): ?>
-                    <input type="text" name="fulfillment[answers][][value]"
-                           id="fulfillment_answers_attributes__value"/>
+                    <input type="text" name="fulfillment[answers_attributes][][value]"
+                    />
                 <?php else: ?>
-                    <textarea name="fulfillment[answers][][value]"
-                              id="fulfillment_answers_attributes__value"></textarea>
+                    <textarea name="fulfillment[answers_attributes][][value]"
+                    ></textarea>
                 <?php endif; ?>
             <?php endforeach; ?>
         </div>
 
         <div class="actions">
-            <button type="submit" value="Save">Save</button>
+            <button type="submit" name="button" value="Save">Save</button>
         </div>
     </form>
 <?php endif; ?>

@@ -30,5 +30,39 @@ class AnswerController extends Controller
         return $this->view('answer.exercise', compact('answers', 'exercise'));
     }
 
+    function new(int $exerciseId)
+    {
+        if (isset($_POST) && Exercise::exist($exerciseId)) {
+            $exercise = Exercise::get($exerciseId);
+
+            $user = new User();
+            $user->setName(date("Y-m-d H:i:s") . ' UTC');
+            $userid = $user->create();
+            $tmpQuestion = '';
+            foreach ($_POST['fulfillment'] as $answers_attributes => $array) {
+                foreach ($array as $post)
+                    if (array_key_exists('questionId', $post)) {
+                        $tmpQuestion = $post['questionId'];
+                    } else {
+                        $answer = new Answer();
+                        $answer->setAnswer($post['value']);
+                        $answer->setUser($userid);
+                        $answer->setQuestion($tmpQuestion);
+                        $answer->create();
+                    }
+            }
+            header('Location: /answer/exercise/' . $exerciseId . "/edit/" . $userid);
+        }
+    }
+
+    function edit(int $exerciseId, int $userId)
+    {
+        if (Exercise::exist($exerciseId) && User::exist($userId)) {
+            $exercise = Exercise::get($exerciseId);
+            $answers = Answer::getAnswersByExercise($exerciseId, ['user_id' => $userId]);
+            return $this->view('answer.edit', compact('exercise', 'answers'));
+        }
+    }
+
 
 }
