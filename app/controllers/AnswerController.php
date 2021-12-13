@@ -37,7 +37,7 @@ class AnswerController extends Controller
 
             $user = new User();
             $user->setName(date("Y-m-d H:i:s") . ' UTC');
-            $userid = $user->create();
+            $userId = $user->create();
             $tmpQuestion = '';
             foreach ($_POST['fulfillment'] as $answers_attributes => $array) {
                 foreach ($array as $post)
@@ -46,12 +46,12 @@ class AnswerController extends Controller
                     } else {
                         $answer = new Answer();
                         $answer->setAnswer($post['value']);
-                        $answer->setUser($userid);
+                        $answer->setUser($userId);
                         $answer->setQuestion($tmpQuestion);
                         $answer->create();
                     }
             }
-            header('Location: /answer/exercise/' . $exerciseId . "/edit/" . $userid);
+            header('Location: /answer/exercise/' . $exerciseId . "/edit/" . $userId);
         }
     }
 
@@ -60,9 +60,31 @@ class AnswerController extends Controller
         if (Exercise::exist($exerciseId) && User::exist($userId)) {
             $exercise = Exercise::get($exerciseId);
             $answers = Answer::getAnswersByExercise($exerciseId, ['user_id' => $userId]);
-            return $this->view('answer.edit', compact('exercise', 'answers'));
+            return $this->view('answer.edit', compact('exercise', 'answers', 'userId'));
         }
     }
 
+    function update(int $exerciseId, int $userId)
+    {
+        if (Exercise::exist($exerciseId) && User::exist($userId)) {
+            // TODO replace by exist
+            $answers = Answer::getAnswersByExercise($exerciseId, ['user_id' => $userId]);
+            if (!is_null($answers) && isset($_POST)) {
+                foreach ($_POST['fulfillment'] as $answers_attributes => $array) {
+                    foreach ($array as $post)
+                        if (isset($post['questionId'])) {
+                            $tmpQuestion = $post['questionId'];
+                        } else {
+                            $answer = Answer::getAnswers(intval($tmpQuestion), intval($userId));
+                            $answer->setAnswer($post['value']);
+                            $answer->setUser($userId);
+                            $answer->setQuestion($tmpQuestion);
+                            $answer->edit();
+                        }
+                }
+                 header('Location: /answer/exercise/' . $exerciseId . "/edit/" . $userId);
+            }
+        }
+    }
 
 }
