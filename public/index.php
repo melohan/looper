@@ -2,7 +2,7 @@
 
 use Router\Router;
 
-const FOLDERROOT = './';
+const FOLDERROOT = '../';
 
 require(realpath(FOLDERROOT . '/vendor/autoload.php'));
 
@@ -45,10 +45,11 @@ $router->post('/question/update/:id', 'App\Controllers\questionController@update
 $router->get('/question/fields/', 'App\Controllers\questionController@fields');
 
 // Answers
-// TODO update paths in views
 $router->get('/answer/question/:id', 'App\Controllers\answerController@question');
 $router->get('/answer/user/:userId/exercise/:exerciseId', 'App\Controllers\answerController@user');
 $router->get('/answer/exercise/:id', 'App\Controllers\answerController@exercise');
+$router->get('answer/exercise/:exerciseId/edit/:userId', 'App\Controllers\answerController@edit');
+$router->post('answer/fulfillments/:exerciseId/', 'App\Controllers\answerController@new');
 
 
 //Etc
