@@ -50,6 +50,7 @@ $router->get('/answer/user/:userId/exercise/:exerciseId', 'App\Controllers\answe
 $router->get('/answer/exercise/:id', 'App\Controllers\answerController@exercise');
 $router->get('answer/exercise/:exerciseId/edit/:userId', 'App\Controllers\answerController@edit');
 $router->post('answer/fulfillments/:exerciseId/', 'App\Controllers\answerController@new');
+$router->post('answer/exercise/:exerciseId/update/:userId', 'App\Controllers\answerController@update');
 
 
 //Etc
