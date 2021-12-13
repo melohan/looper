@@ -40,6 +40,16 @@ class Answer extends Model
         $this->answer = $answer;
     }
 
+    public function setUser(int $id)
+    {
+        $this->user->setId($id);
+    }
+
+    public function setQuestion(int $id)
+    {
+        $this->question->setId($id);
+    }
+
     public function getAnswer(): string
     {
         return $this->answer;
