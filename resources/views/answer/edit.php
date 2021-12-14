@@ -22,8 +22,8 @@ $headerClass = "heading answering";
                            name="fulfillment[answers_attributes][][value]"
                     />
                 <?php else: ?>
-                    <textarea value="<?= $answer->getAnswer(); ?>" name="fulfillment[answers_attributes][][value]"
-                    ></textarea>
+                    <textarea name="fulfillment[answers_attributes][][value]"
+                    ><?= $answer->getAnswer() ?></textarea>
                 <?php endif; ?>
             <?php endforeach; ?>
         </div>
