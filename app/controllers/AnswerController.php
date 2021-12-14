@@ -26,8 +26,8 @@ class AnswerController extends Controller
     function exercise(int $id)
     {
         $exercise = Exercise::get($id);
-        $answers = Exercise::exist($id) ? Answer::getAnswersByExercise($id) : [];
-        return $this->view('answer.exercise', compact('answers', 'exercise'));
+        $questions = Exercise::exist($id) ? Question::toObjectMany(Question::selectManyWhere('exercise_id', $id)) : [];
+        return $this->view('answer.exercise', compact('exercise', 'questions'));
     }
 
     function new(int $exerciseId)
@@ -75,14 +75,14 @@ class AnswerController extends Controller
                         if (isset($post['questionId'])) {
                             $tmpQuestion = $post['questionId'];
                         } else {
-                            $answer = Answer::getAnswers(intval($tmpQuestion), intval($userId));
+                            $answer = Answer::getAnswers($tmpQuestion, $userId);
                             $answer->setAnswer($post['value']);
                             $answer->setUser($userId);
                             $answer->setQuestion($tmpQuestion);
                             $answer->edit();
                         }
                 }
-                 header('Location: /answer/exercise/' . $exerciseId . "/edit/" . $userId);
+                header('Location: /answer/exercise/' . $exerciseId . "/edit/" . $userId);
             }
         }
     }

@@ -1,25 +1,22 @@
 <?php
 $exercise = $params['exercise'];
 $headerText = ($exercise != null) ? "<span class='exercise-label'><a href='/answer/exercise/" . $exercise->getId() . "'>" . $exercise->getTitle() . "</a></span>" : "";
-
-$answers = $params['answers'];
+$questions = $params['questions'];
 $headerClass = "heading results";
 const DOUBLE_FILLED = 50;
 $lastId = '';
 $users = \App\Models\User::getByExercise($exercise->getId());
 ?>
-<?php if (is_array($answers) && count($answers) > 0): ?>
+<?php if (is_array($questions) && count($questions) > 0): ?>
     <table>
         <thead>
         <tr>
             <th>Take</th>
-            <?php foreach ($answers as $answer): ?>
-                <?php if ($lastId != $answer->getQuestion()->getId()): ?>
-                    <th>
-                        <a href="/answer/question/<?= $answer->getQuestion()->getId(); ?>"><?= $answer->getQuestion()->getText(); ?></a>
-                    </th>
-                <?php endif; ?>
-                <?php $lastId = $answer->getQuestion()->getId(); ?>
+            <?php foreach ($questions as $question): ?>
+                <th>
+                    <a href="/answer/question/<?= $question->getId(); ?>"><?= $question->getText(); ?></a>
+                </th>
+                <?php $lastId = $question->getId(); ?>
             <?php endforeach; ?>
         </tr>
         </thead>
@@ -30,7 +27,10 @@ $users = \App\Models\User::getByExercise($exercise->getId());
                     <a href="/answer/user/<?= $user->getId(); ?>/exercise/<?= $exercise->getId(); ?>"><?= $user->getName(); ?></a>
                 </td>
 
-                <?php $answers = \App\Models\Answer::getAnswersByExercise($exercise->getId(), ['user_id' => $user->getId()]); ?>
+                <?php
+                $answers = \App\Models\Answer::getAnswersByExercise($exercise->getId(), ['user_id' => $user->getId()]);
+                ?>
+
                 <?php foreach ($answers as $answer): ?>
                     <td class="answer">
                         <?php if (empty($answer->getAnswer())): ?>
