@@ -9,13 +9,24 @@ use App\Models\User;
 
 class AnswerController extends Controller
 {
+    /**
+     * Return user view depending of answers by user and exercise id
+     * If user and answers doesn't exist it returns an empty page.
+     * @param int $userId
+     * @param int $exerciseId
+     */
     function user(int $userId, int $exerciseId)
     {
-        $exercise = User::exist($userId) && Exercise::exist($exerciseId) ? Answer::getExercisesBy(['user_id' => $userId]) : null;
-        $answers = User::exist($userId) && Exercise::exist($exerciseId) ? Answer::getAnswersByExercise($exerciseId, ['user_id' => $userId]) : [];
+        $exercise = Answer::getExercisesBy(['user_id' => $userId]);
+        $answers = Answer::getAnswersByExercise($exerciseId, ['user_id' => $userId]);
         return $this->view('answer.user', compact('answers', 'exercise'));
     }
 
+    /**
+     * Return answers by question id
+     * If user id doesn't exist or doesn't have any answers it returns an empty page.
+     * @param int $id
+     */
     function question(int $id)
     {
         $exercise = Question::exist($id) ? Answer::getExercisesBy(['question_id' => $id]) : null;
@@ -23,18 +34,26 @@ class AnswerController extends Controller
         return $this->view('answer.question', compact('answers', 'exercise'));
     }
 
+    /**
+     * Return answers by exercise id
+     * If user id doesn't exist or doesn't have any answers it returns an empty page.
+     * @param int $id
+     */
     function exercise(int $id)
     {
         $exercise = Exercise::get($id);
-        $questions = Exercise::exist($id) ? Question::toObjectMany(Question::selectManyWhere('exercise_id', $id)) : [];
-        return $this->view('answer.exercise', compact('exercise', 'questions'));
+        $questions = Question::getManyBy(['exercise_id' => $id]);
+        $users = User::getByExercise($exercise->getId());
+        return $this->view('answer.exercise', compact('exercise', 'questions', 'users'));
     }
 
+    /**
+     * Create a new answers and redirect to the exercise answer's edition page.
+     * @param int $exerciseId
+     */
     function new(int $exerciseId)
     {
         if (isset($_POST) && Exercise::exist($exerciseId)) {
-            $exercise = Exercise::get($exerciseId);
-
             $user = new User();
             $user->setName(date("Y-m-d H:i:s") . ' UTC');
             $userId = $user->create();
@@ -55,6 +74,12 @@ class AnswerController extends Controller
         }
     }
 
+    /**
+     * Return answer edition page.
+     * It returns an empty page if exercise and user id is empty
+     * @param int $exerciseId
+     * @param int $userId
+     */
     function edit(int $exerciseId, int $userId)
     {
         if (Exercise::exist($exerciseId) && User::exist($userId)) {
@@ -62,12 +87,18 @@ class AnswerController extends Controller
             $answers = Answer::getAnswersByExercise($exerciseId, ['user_id' => $userId]);
             return $this->view('answer.edit', compact('exercise', 'answers', 'userId'));
         }
+        return $this->view('answer.edit');
     }
 
+    /**
+     * Update answers with posted value from POST request.
+     * Once data is updated, it redirects to edition page.
+     * @param int $exerciseId
+     * @param int $userId
+     */
     function update(int $exerciseId, int $userId)
     {
         if (Exercise::exist($exerciseId) && User::exist($userId)) {
-            // TODO replace by exist
             $answers = Answer::getAnswersByExercise($exerciseId, ['user_id' => $userId]);
             if (!is_null($answers) && isset($_POST)) {
                 foreach ($_POST['fulfillment'] as $answers_attributes => $array) {
