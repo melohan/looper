@@ -1,7 +1,9 @@
 <?php
-
-$headerText = "test";
-$headerClass = "heading managing";
+$cssClass = "heading managing";
+$text = "Exercice: ";
+$useLink = (!is_null($params['question']) && $params['question']->getText() != null);
+$textLink = (!is_null($params['question']) && $params['question']->getText() != null) ? $params['question']->getText() : '';
+$urlLink = (!is_null($params['question']) && $params['question']->getText() != null) ? '/question/fields/' . $params['question']->getId() : '';
 
 $question = $params['question'];
 $types = $params['types'];

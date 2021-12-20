@@ -1,13 +1,12 @@
 <?php
+$cssClass = "heading managing";
+$text = "Exercice: ";
+$useLink = (!is_null($params['exercise']) && $params['exercise']->getTitle() != null);
+$textLink = (!is_null($params['exercise']) && $params['exercise']->getTitle() != null) ? $params['exercise']->getTitle() : '';
+$urlLink = (!is_null($params['exercise']) && $params['exercise']->getTitle() != null) ? '/question/fields/' . $params['exercise']->getId() : '';
 
 $exercise = $params['exercise'];
 $types = $params['types'];
-
-$headerClass = "heading managing";
-$headerText =
-    (!is_null($exercise) && $exercise->getTitle()
-        != null) ? "Exercise: <span class='exercise-label'>
-<a href='/question/fields/" . $exercise->getId() . "'>" . htmlspecialchars($exercise->getTitle()) . "</a></span>" : "New exercise";
 
 ?>
 <div class="row">

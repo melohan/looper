@@ -1,6 +1,8 @@
 <?php
+$cssClass = "heading answering";
+$text = $params['exercise'] != null ? $params['exercise']->getTitle() : '';
+
 $exercise = $params['exercise'];
-$headerText = ($exercise != null) ? "<span class='exercise-label'>" . htmlspecialchars($exercise->getTitle()) . "</span>" : "";
 $answers = $params['answers'];
 $headerClass = "heading answering";
 ?>

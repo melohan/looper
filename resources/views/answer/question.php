@@ -1,7 +1,12 @@
 <?php
+
+$cssClass = "heading results";
+$text = "Exercise: ";
+$useLink = $params['exercise'] != null;
+$textLink = $params['exercise'] != null ? $params['exercise']->getTitle() : '';
+$urlLink = $params['exercise'] != null ? '/answer/exercise/' . $params['exercise']->getId() : '';
+
 $exercise = $params['exercise'];
-$headerText = ($exercise != null) ? "<span class='exercise-label'><a href='/answer/exercise/" . $exercise->getId() . "'>" . htmlspecialchars($exercise->getTitle()) . "</a></span>" : "";
-$headerClass = "heading results";
 $answers = $params['answers'];
 ?>
 <?php if (isset($answers) && !empty($answers)): ?>
