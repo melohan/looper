@@ -56,7 +56,7 @@ class Route
         // For 2 params in GET method
         if (isset($this->matches) && count($this->matches) == 3) {
             return $controller->$method($this->matches[1], $this->matches[2]);
-        // For 1 params in GET method
+            // For 1 params in GET method
         } elseif (isset($this->matches) && count($this->matches) == 2) {
             return $controller->$method($this->matches[1]);
         }
