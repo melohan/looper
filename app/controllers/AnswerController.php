@@ -82,12 +82,9 @@ class AnswerController extends Controller
      */
     function edit(int $exerciseId, int $userId)
     {
-        if (Exercise::exist($exerciseId) && User::exist($userId)) {
-            $exercise = Exercise::get($exerciseId);
-            $answers = Answer::getAnswersByExercise($exerciseId, ['user_id' => $userId]);
-            return $this->view('answer.edit', compact('exercise', 'answers', 'userId'));
-        }
-        return $this->view('answer.edit');
+        $exercise = Exercise::get($exerciseId);
+        $answers = Answer::getAnswersByExercise($exerciseId, ['user_id' => $userId]);
+        return $this->view('answer.edit', compact('exercise', 'answers', 'userId'));
     }
 
     /**
