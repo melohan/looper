@@ -57,6 +57,6 @@ class Router
                 return $route->execute();
             }
         }
-        header('Location: /page/error/400');
+        header('Location: /page/error/404');
     }
 }
