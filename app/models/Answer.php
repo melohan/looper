@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Database\QueryBuilder;
 use App\Models\User;
 use App\Models\Question;
-use function PHPUnit\Framework\isNull;
 
 class Answer extends Model
 {
@@ -19,12 +19,12 @@ class Answer extends Model
      * @param int|null $userId
      * @param string|null $answer
      */
-    public function __construct(int $id = null, int $questionId = null, int $userId = null, string $answer = null)
+    public function __construct(int $id = null, int $questionId = null, int $userId = null, string $answer = "")
     {
         $this->user = new User();
         $this->question = new Question();
 
-        if ($questionId != null || $userId != null || $answer != null) {
+        if ($questionId != null && $userId != null) {
             $this->id = $id;
             $this->user = User::get($userId);
             $this->question = Question::get($questionId);
@@ -35,7 +35,7 @@ class Answer extends Model
 
     /*      Setter & getters    */
 
-    public function setAnswer(string $answer="")
+    public function setAnswer(string $answer = "")
     {
         $this->answer = $answer;
     }
@@ -76,109 +76,29 @@ class Answer extends Model
 
     static public function get(int $id): Answer|null
     {
-        $selection = parent::selectWhere('id', $id);
+        $selection = self::getById($id);
+
         if (!count($selection)) {
             return null;
         }
         return new Answer($selection['id'], $selection['question_id'], $selection['user_id'], $selection['answer']);;
     }
 
-
-    /**
-     * Get one Answer by question and user id
-     * @param int $firstId
-     * @param int $scndId
-     * @return Answer|null
-     */
-    static public function getAnswers(int $questionId, int $userId): Answer|null
-    {
-
-        $selection = parent::select("SELECT * FROM answers WHERE answers.question_id = :question_id AND answers.user_id = :user_id", ['question_id' => $questionId, 'user_id' => $userId]);
-        // select is based on select many so we need to access to [0]
-        if (!count($selection)) {
-            return null;
-        }
-        return new Answer($selection[0]['id'], $selection[0]['question_id'], $selection[0]['user_id'], $selection[0]['answer']);
-    }
-
-    /**
-     * Get Exercises by answers fields
-     * @param array $params
-     * @return Exercise|null
-     */
-    static public function getExercisesBy(array $params): Exercise|null
-    {
-        // concatenate in and condition if params is not empty
-        $keys = array_keys($params);
-        $and = implode(' ', array_map(function ($item) {
-            return 'AND ' . $item . ' = :' . $item;
-        }, $keys));
-        $selection = parent::select(
-            "SELECT exercises.id, exercises.title, exercises.status_id FROM  answers
-                    INNER JOIN questions ON questions.id = answers.question_id
-                    INNER JOIN exercises ON exercises.id = questions.exercise_id
-                    WHERE 1 " . $and . " GROUP BY exercises.id", $params);
-        if (!count($selection)) {
-            return null;
-        }
-        return Exercise::toObject($selection[0]);
-    }
-
-    /**
-     * Return Answers array objects by exercise id
-     * @param int $exerciseId
-     * @return array|null
-     */
-    static public function getAnswersByExercise(int $exerciseId, array $params = []): array|null
-    {
-        $query = "SELECT answers.id, answers.question_id, answers.user_id, answers.answer FROM answers
-                  INNER JOIN questions ON questions.id = answers.question_id
-                  INNER JOIN exercises ON exercises.id = questions.exercise_id
-                  WHERE exercises.id = :exerciseId";
-        $keys = array_keys($params);
-        $and = implode(' ', array_map(function ($item) {
-            return 'AND ' . $item . ' = :' . $item;
-        }, $keys));
-        $params['exerciseId'] = $exerciseId;
-        $selection = parent::select($query . " " . $and, $params);
-        return self::toObjectMany($selection);
-    }
-
-    /**
-     * Get Answers
-     * @return Answer|null
-     */
-    static public function getAnswersBy(array $params): array|null
-    {
-        // concatenate in and condition if params is not empty
-        $keys = array_keys($params);
-        $and = implode(' ', array_map(function ($item) {
-            return 'AND ' . $item . ' = :' . $item;
-        }, $keys));
-        $selection = parent::select("SELECT * FROM answers WHERE 1 " . $and, $params);
-        if (!count($selection)) {
-            return null;
-        }
-        return self::toObjectMany($selection);
-    }
-
-
     public function edit(): void
     {
-        parent::execute("UPDATE answers SET user_id = :user_id, question_id = :question_id, answer = :answer WHERE id = :id",
-            ['user_id' => $this->getUser()->getId(), 'question_id' => $this->getQuestion()->getId(), 'answer' => $this->answer, 'id' => $this->id]);
+        self::update(
+            [
+                'user_id' => $this->getUser()->getId(),
+                'question_id' => $this->getQuestion()->getId(),
+                'answer' => $this->answer],
+            $this->id);
     }
 
     public function remove(): void
     {
-        parent::execute("DELETE FROM answers WHERE user_id = :user_id AND question_id  = :question_id",
-            ['user_id' => $this->getUser()->getId(), 'question_id' => $this->getQuestion()->getId()]);
+        parent::delete($this->id);
     }
 
-    /**
-     * Create record but doesn't return ID because of double foreign keys as id
-     * @return array|false
-     */
     public function create(): int|false
     {
         $result = parent::insert(['question_id' => $this->getQuestion()->getId(), 'user_id' => $this->getUser()->getId(), 'answer' => $this->getAnswer()]);
@@ -191,11 +111,6 @@ class Answer extends Model
         }
     }
 
-
-    /**
-     * Convert associative array to object
-     * @param array $params
-     */
     public static function toObject(array $params): Answer|null
     {
         if (empty($params)) {
@@ -215,12 +130,6 @@ class Answer extends Model
         return $o;
     }
 
-    /**
-     * Convert array of associative arrays to objects
-     * Convert many to
-     * @param array $params
-     * @return array
-     */
     public static function toObjectMany(array $params): array
     {
         $result = [];
@@ -229,4 +138,72 @@ class Answer extends Model
         }
         return $result;
     }
+
+    /*   Object Specialized  Operations  */
+
+    /**
+     * Get answers by question id and user id
+     * @param int $questionId
+     * @param int $userId
+     * @return Answer|null
+     */
+    static public function getAnswers(int $questionId, int $userId): Answer|null
+    {
+        $q = new QueryBuilder();
+        $query = $q->select()->from('answers')->whereEqual(['question_id' => $questionId, 'user_id' => $userId])->build();
+        $result = parent::selectOne($query, ['question_id' => $questionId, 'user_id' => $userId]);
+        return empty($result) ? null : self::toObject($result);
+    }
+
+    /**
+     * Return Answers array objects by exercise id
+     * @param int $exerciseId
+     * @return array|null
+     */
+    static public function getAnswersByExercise(int $exerciseId, array $params = []): array|null
+    {
+        $q = new QueryBuilder();
+        $query = $q->select(['answers.id', 'answers.question_id', 'answers.user_id', 'answers.answer'])
+            ->from('answers')
+            ->join('questions', 'questions.id', 'answers.question_id')
+            ->join('exercises ', 'exercises.id', 'questions.exercise_id')
+            ->whereEqual($params)
+            ->build();
+        $result = self::selectMany($query, $params);
+        return empty($result) ? null : self::toObjectMany($result);
+    }
+
+    /**
+     * Get Answers by parameters
+     * @return Answer|null
+     */
+    static public function getAnswersBy(array $params): array|null
+    {
+        $q = new QueryBuilder();
+        $query = $q->select()->from('answers')->whereEqual($params)->build();
+        $result = self::selectMany($query, $params);
+        return empty($result) ? null : self::toObjectMany($result);
+    }
+
+    /**
+     * Get Exercises by answers fields
+     * @param array $params
+     * @return Exercise|null
+     */
+    static public function getExercisesBy(array $params): Exercise|null
+    {
+        $q = new QueryBuilder();
+        $query = $q
+            ->select(['exercises.id', 'exercises.title', 'exercises.status_id'])
+            ->from('answers')
+            ->join('questions', 'questions.id', 'answers.question_id')
+            ->join('exercises', 'exercises.id', 'questions.exercise_id')
+            ->whereEqual($params)
+            ->groupBy('exercises.id')
+            ->build();
+        $result = self::selectOne($query, $params);
+        return empty($result) ? null : Exercise::toObject($result);
+    }
+
+
 }

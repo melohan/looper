@@ -3,11 +3,10 @@
 namespace App\Models;
 
 
-use function PHPUnit\Framework\isEmpty;
+use App\Database\QueryBuilder;
 
 class Exercise extends Model
 {
-
     private int $id;
     private string $title;
     private Status $status;
@@ -18,11 +17,10 @@ class Exercise extends Model
      * @param string|null $title
      * @param int|null $statusId
      */
-    public function __construct(int $id = null, string $title = null, int $statusId = null)
+    public function __construct(int $id = null, string $title = '', int $statusId = null)
     {
         $this->status = new Status();
-        // TODO correct id != null OR
-        if ($id != null || $title != null) {
+        if (!is_null($id) && !is_null($statusId)) {
             $this->id = $id;
             $this->title = $title;
             $this->status = Status::get($statusId);
@@ -56,37 +54,32 @@ class Exercise extends Model
         return $this->status;
     }
 
-    /*     Operations      */
+
+    /*     Operations  */
 
     static function get(int $id): Exercise|null
     {
-        $selection = parent::selectWhere('id', $id);
+        $selection = self::getById($id);
         if (!count($selection)) {
             return null;
         }
-        $exercise = new Exercise($selection['id'], $selection['title'], $selection['status_id']);
-        return $exercise;
-    }
-
-    public function remove(): void
-    {
-        $this->delete($this->id);
+        return new Exercise($selection['id'], $selection['title'], $selection['status_id']);;
     }
 
     public function edit(): void
     {
-        $this->update($this->id, ['title' => $this->title, 'status_id' => $this->status->getId()]);
+        self::update(['title' => $this->title, 'status_id' => $this->status->getId()], $this->id,);
     }
 
-    public function editStatus(): void
+    public function remove(): void
     {
-        $this->update($this->id, ['status_id' => $this->status->getId()]);
+        self::delete($this->id);
     }
 
     public function create(): int|false
     {
-        $result = parent::insert(['title' => $this->title, 'status_id' => $this->status->getId()]);
-        if ($result === false) {
+        $result = self::insert(['title' => $this->title, 'status_id' => $this->status->getId()]);
+        if (!is_int($result)) {
             return false;
         } else {
             $this->id = $result;
@@ -94,31 +87,6 @@ class Exercise extends Model
         }
     }
 
-    /**
-     * Return true if current exercise has question.
-     * @return bool
-     */
-    public function hasQuestions(): bool
-    {
-        $query = 'SELECT COUNT(answers.question_id) FROM answers GROUP BY answers.question_id HAVING question_id = :question_id';
-        return count(self::select($query, ['question_id' => $this->id])) != 0;
-    }
-
-    /**
-     * Return array of exercises by exercise status
-     * @param ExerciseStatus $status
-     */
-    public static function selectByStatus(int $statusId)
-    {
-        $query = "SELECT * FROM exercises WHERE status_id = :status_id";
-        $selection = parent::select($query, ['status_id' => $statusId]);
-        return self::toObjectMany($selection);
-    }
-
-    /**
-     * Convert associative array to object
-     * @param array $params
-     */
     public static function toObject(array $params): Exercise|null
     {
         if (empty($params)) {
@@ -134,12 +102,6 @@ class Exercise extends Model
         return $o;
     }
 
-    /**
-     * Convert array of associative arrays to objects
-     * Convert many to
-     * @param array $params
-     * @return array
-     */
     public static function toObjectMany(array $params): array
     {
         $result = [];
@@ -148,9 +110,88 @@ class Exercise extends Model
         }
         return $result;
     }
+
+    /*   Object Specialized  Operations  */
+
+
+    /**
+     * Get exercise by questions or answers fields
+     * @param array $params
+     */
+    public static function getByMultiple(array $params, bool $getOne = true): array|null
+    {
+        $q = new QueryBuilder();
+        $query = $q->select(['exercises.id', 'exercises.title', 'exercises.status_id'])
+            ->from('answers')
+            ->join('questions', 'questions.id', 'answers.question_id')
+            ->join('exercises', 'exercises.id', 'questions.exercise_id')
+            ->whereEqual($params)
+            ->groupBy('exercise_id')
+            ->build();
+        $result = self::selectMany($query, $params);
+        return empty($result) ? null : self::toObjectMany($result);
+    }
+
+    /**
+     * Return true if current exercise has question.
+     * @return bool
+     */
+    public function hasQuestions(): bool
+    {
+        $q = new QueryBuilder();
+        $query = $q->selectCount('*')
+            ->as('nbQuestion')
+            ->from('questions')
+            ->where('exercise_id', '=')
+            ->build();
+        $result = self::selectOne($query, ['exercise_id' => $this->id]);
+        return intval($result['nbQuestion'] > 0);
+    }
+
+    /**
+     * Return array of exercises by exercise status
+     * @param ExerciseStatus $status
+     */
+    public static function getByStatus(int $statusId): array|null
+    {
+        $q = new QueryBuilder();
+        $query = $q->select()
+            ->from('exercises')
+            ->where('status_id', '=')
+            ->build();
+        $result = self::selectMany($query, ['status_id' => $statusId]);
+        return empty($result) ? null : self::toObjectMany($result);
+    }
+
+    /**
+     * Get question by current exercise
+     * @return array|null
+     */
     public function getQuestions(): array|null
     {
-        $questions = Question::selectManyWhere('exercise_id', $this->id);
-        return  Question::toObjectMany($questions);
+        return Question::getWhere(['exercise_id' => $this->id]);
     }
+
+    /**
+     * Get array object where params condition.
+     * @param array $params
+     * @return array|null
+     */
+    public static function getWhere(array $params): array|null
+    {
+        $q = new QueryBuilder();
+        $query = $q->select()->from('Exercises')->whereEqual($params)->build();
+        $result = self::selectMany($query, $params);
+        return empty($result) ? null : self::toObjectMany($result);
+    }
+
+    /**
+     * Changes the status of the current question. The change was made in the status
+     * object of the current exercise instance.
+     */
+    public function editStatus(): void
+    {
+        $this->update(['status_id' => $this->status->getId()], $this->id);
+    }
+
 }
