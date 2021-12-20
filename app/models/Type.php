@@ -47,7 +47,7 @@ class Type extends Model
 
     static public function get(int $id): Type|null
     {
-        $selection = parent::selectById($id);
+        $selection = self::getById($id);
         if (count($selection) == 0) {
             return null;
         }
@@ -56,18 +56,18 @@ class Type extends Model
 
     public function edit(): void
     {
-        $this->update($this->id, ['name' => $this->name]);
+        self::update(['name' => $this->name], $this->id);
     }
 
     public function remove(): void
     {
-        $this->delete($this->id);
+        parent::delete($this->id);
     }
 
     public function create(): int|false
     {
         $result = parent::insert(['name' => $this->name]);
-        if ($result === false) {
+        if (!is_int($result)) {
             return false;
         } else {
             $this->id = $result;
@@ -76,10 +76,6 @@ class Type extends Model
 
     }
 
-    /**
-     * Convert associative array to object
-     * @param array $params
-     */
     public static function toObject(array $params): Type|null
     {
         if (empty($params)) {
@@ -94,12 +90,6 @@ class Type extends Model
         return $o;
     }
 
-    /**
-     * Convert array of associative arrays to objects
-     * Convert many to
-     * @param array $params
-     * @return array
-     */
     public static function toObjectMany(array $params): array
     {
         $result = [];
@@ -109,11 +99,12 @@ class Type extends Model
         return $result;
     }
 
-    // todo Correct function name
-    public static function allTypes():array{
-       $all = Type::selectAll();
-       return self::toObjectMany($all);
-    }
+    /*   Object Specialized  Operations  */
 
+    public static function getAll(): array
+    {
+        $all = parent::getAll();
+        return self::toObjectMany($all);
+    }
 
 }

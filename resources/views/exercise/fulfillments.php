@@ -1,10 +1,10 @@
 <?php
 $exercise = $params['exercise'];
-$headerText = ($exercise != null) ? "<span class='exercise-label'>" . $exercise->getTitle() . "</span>" : "";
+$headerText = ($exercise != null) ? "<span class='exercise-label'>" . htmlspecialchars($exercise->getTitle()) . "</span>" : "";
 $questions = isset($params['exercise']) ? $exercise->getQuestions() : null;
 $headerClass = "heading answering";
 ?>
-<?php if (is_array($questions) && count($questions) > 0): ?>
+<?php if (isset($questions) && !empty($questions)): ?>
     <h1>Your take</h1>
     <p>If you'd like to come back later to finish, simply submit it with blanks</p>
 
@@ -12,7 +12,7 @@ $headerClass = "heading answering";
 
         <div class="field">
             <?php foreach ($exercise->getQuestions() as $question): ?>
-                <label for="fulfillment_answers_attributes__value"><?= $question->getText(); ?></label>
+                <label for="fulfillment_answers_attributes__value"><?= htmlspecialchars($question->getText()); ?></label>
                 <input type="hidden" value="<?= $question->getId(); ?>"
                        name="fulfillment[answers_attributes][][questionId]"
                 />

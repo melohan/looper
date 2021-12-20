@@ -3,7 +3,8 @@
 use App\Models\Type;
 use PHPUnit\Framework\TestCase;
 
-include_once "./config/db.php";
+require_once 'config/DB.php';
+
 
 class TypeTest extends TestCase
 {
@@ -126,7 +127,7 @@ class TypeTest extends TestCase
     public function testToObject_toObjectFromArray_newObject()
     {
         $fromGet = Type::get(1);
-        $params = Type::selectById(1);
+        $params = Type::getById(1);
         $fromToObject = Type::toObject($params);
         self::assertEquals($fromGet, $fromToObject);
     }

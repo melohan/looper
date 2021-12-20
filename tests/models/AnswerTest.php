@@ -3,7 +3,8 @@
 use App\Models\Answer;
 use PHPUnit\Framework\TestCase;
 
-include "./config/db.php";
+require_once 'config/DB.php';
+
 
 class AnswerTest extends TestCase
 {
@@ -116,7 +117,7 @@ class AnswerTest extends TestCase
     public function testToObject_toObjectFromArray_newObject()
     {
         $fromGet = Answer::get(1);
-        $params = Answer::selectById(1);
+        $params = Answer::getById(1);
         $fromToObject = Answer::toObject($params);
         self::assertEquals($fromGet, $fromToObject);
     }

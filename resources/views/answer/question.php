@@ -1,11 +1,11 @@
 <?php
 $exercise = $params['exercise'];
-$headerText = ($exercise != null) ? "<span class='exercise-label'><a href='/answer/exercise/" . $exercise->getId() . "'>" . $exercise->getTitle() . "</a></span>" : "";
+$headerText = ($exercise != null) ? "<span class='exercise-label'><a href='/answer/exercise/" . $exercise->getId() . "'>" . htmlspecialchars($exercise->getTitle()) . "</a></span>" : "";
 $headerClass = "heading results";
 $answers = $params['answers'];
 ?>
-<?php if (is_array($answers) && count($answers) > 0): ?>
-    <h1><?= $answers[0]->getQuestion()->getText(); ?></h1>
+<?php if (isset($answers) && !empty($answers)): ?>
+    <h1><?= htmlspecialchars($answers[0]->getQuestion()->getText()); ?></h1>
 
     <table>
         <thead>
@@ -17,9 +17,10 @@ $answers = $params['answers'];
         <tbody>
         <?php foreach ($answers as $answer): ?>
             <tr>
-                <td><a href="/answer/user/<?= $answer->getUser()->getId(); ?>/exercise/<?= $exercise->getId(); ?>"><?= $answer->getUser()->getName(); ?></a>
+                <td>
+                    <a href="/answer/user/<?= $answer->getUser()->getId(); ?>/exercise/<?= $exercise->getId(); ?>"><?= $answer->getUser()->getName(); ?></a>
                 </td>
-                <td><?= $answer->getAnswer(); ?></td>
+                <td><?= htmlspecialchars($answer->getAnswer()); ?></td>
             </tr>
         <?php endforeach; ?>
         </tbody>

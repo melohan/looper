@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Database\QueryBuilder;
+
 class User extends Model
 {
 
@@ -13,9 +15,9 @@ class User extends Model
      * @param int|null $id
      * @param string|null $name
      */
-    public function __construct(int $id = null, string $name = null)
+    public function __construct(int $id = null, string $name = "")
     {
-        if ($id != null && $name != null) {
+        if ($id != null && $name != "") {
             $this->id = $id;
             $this->name = $name;
         }
@@ -47,7 +49,7 @@ class User extends Model
 
     static function get(int $id): User|null
     {
-        $selection = User::selectWhere('id', $id);
+        $selection = User::getById($id);
         if (!count($selection)) {
             return null;
         }
@@ -55,20 +57,20 @@ class User extends Model
         return $user;
     }
 
-    public function remove(): void
-    {
-        $this->delete($this->id);
-    }
-
     public function edit(): void
     {
-        $this->update($this->id, ['name' => $this->name]);
+        self::update(['name' => $this->name], $this->id);
+    }
+
+    public function remove(): void
+    {
+        self::delete($this->id);
     }
 
     public function create(): int|false
     {
         $result = parent::insert(['name' => $this->name]);
-        if ($result === false) {
+        if (!is_int($result)) {
             return false;
         } else {
             $this->id = $result;
@@ -77,10 +79,6 @@ class User extends Model
 
     }
 
-    /**
-     * Convert associative array to object
-     * @param array $params
-     */
     public static function toObject(array $params): User|null
     {
         if (empty($params)) {
@@ -95,12 +93,6 @@ class User extends Model
         return $o;
     }
 
-    /**
-     * Convert array of associative arrays to objects
-     * Convert many to
-     * @param array $params
-     * @return array
-     */
     public static function toObjectMany(array $params): array
     {
         $result = [];
@@ -110,21 +102,26 @@ class User extends Model
         return $result;
     }
 
+    /*   Object Specialized  Operations  */
+
     /**
      * Return array object of users by exercise id
      * @param int $exerciseId
      * @return array
      */
-    public static function getByExercise(int $exerciseId)
+    public static function getByExercise(int $exerciseId): array|null
     {
-        $query = "SELECT users.id, users.name FROM answers
-                  INNER JOIN questions ON answers.question_id = questions.id
-                  iNNER JOIN users ON answers.user_id = users.id
-                  WHERE questions.exercise_id = :exerciseId
-                  GROUP BY users.id
-                  ORDER BY users.name DESC";
-        $selection = self::select($query, ['exerciseId' => $exerciseId]);
-        return self::toObjectMany($selection);
+        $q = new QueryBuilder();
+        $query = $q
+            ->select(['users.id', 'users.name'])->from('answers')
+            ->join('questions', 'answers.question_id', 'questions.id')
+            ->join('users', 'answers.user_id', 'users.id')
+            ->whereColumn('questions.exercise_id', '=', 'exerciseId')
+            ->groupBy('users.id')
+            ->orderBy('users.name', 'DESC')
+            ->build();
+        $selection = self::selectMany($query, ['exerciseId' => $exerciseId]);
+        return empty($selection) ? null : self::toObjectMany($selection);
     }
 
 }

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Author :  Nord Coders
+ * Inspired by :  Nord Coders
  * Date   :  08/11/2021
  * Sources:  https://www.youtube.com/watch?v=hLIP2EwnQ48
  */
@@ -29,7 +30,7 @@ class Router
      * @param string $path
      * @param string $action
      */
-      public function get(string $path, string $action)
+    public function get(string $path, string $action)
     {
         $this->routes['GET'][] = new Route($path, $action);
     }
@@ -56,7 +57,6 @@ class Router
                 return $route->execute();
             }
         }
-
-        throw new Exception("Page not found");
+        header('Location: /page/error/404');
     }
 }

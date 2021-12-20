@@ -48,17 +48,16 @@ class Status extends Model
 
     static function get(int $id): Status|null
     {
-        $selection = Status::selectWhere('id', $id);
+        $selection = Status::getById($id);
         if (!count($selection)) {
             return null;
         }
-
         return new Status($selection['id'], $selection['name']);
     }
 
     public function edit(): void
     {
-        $this->update($this->id, ['name' => $this->name]);
+        $this->update(['name' => $this->name], $this->id);
     }
 
     public function remove(): void
@@ -69,18 +68,11 @@ class Status extends Model
     public function create(): int|false
     {
         $result = parent::insert(['name' => $this->name]);
-        if ($result === false) {
-            return false;
-        } else {
+        if (is_int($result))
             $this->id = $result;
-            return $this->id;
-        }
+        return $result;
     }
 
-    /**
-     * Convert associative array to object
-     * @param array $params
-     */
     public static function toObject(array $params): Status|null
     {
         if (empty($params)) {
@@ -95,12 +87,6 @@ class Status extends Model
         return $o;
     }
 
-    /**
-     * Convert array of associative arrays to objects
-     * Convert many to
-     * @param array $params
-     * @return array
-     */
     public static function toObjectMany(array $params): array
     {
         $result = [];
@@ -110,4 +96,5 @@ class Status extends Model
         return $result;
     }
 
+    /*   Object Specialized  Operations  */
 }

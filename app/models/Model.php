@@ -2,10 +2,20 @@
 
 namespace App\Models;
 
-use PDOException;
+use App\Database\DB;
+use App\Database\QueryBuilder;
 
 abstract class Model
 {
+    /**
+     * Get table name from childrens name
+     * @return string
+     */
+    static private function getTable()
+    {
+        $name = strtolower((new \ReflectionClass(get_called_class()))->getShortName());
+        return preg_match('/.+(s)$/', $name) ? $name : $name . 's';
+    }
 
     /**
      * Return an object by his id
@@ -21,58 +31,128 @@ abstract class Model
 
     /**
      * Remove db record from object
+     * @throws \PDOException if there is an integrity constraint
      */
     abstract public function remove(): void;
 
     /**
      * Create db record from object
      * @return int|false
+     * @throws \PDOException if database set UNIQUE fields
      */
     abstract public function create(): int|false;
 
-
-
     /**
-     * Get table name from childrens name
-     * @return string
+     * Convert associative array to object
+     * @param array $params
+     * @return object|null
      */
-    static private function getTable()
-    {
-        $name = strtolower((new \ReflectionClass(get_called_class()))->getShortName());
-        return preg_match('/.+(s)$/', $name) ? $name : $name . 's';
-    }
-
-    /**     SELECT METHODS     **/
+    abstract public static function toObject(array $params): object|null;
 
     /**
-     * Select and return array of associative array
-     * @param $query
-     * @param $params
-     * @return array|false|mixed
-     */
-    static function select(string $query, array $params)
-    {
-        return db::selectMany($query, $params);
-    }
-
-    /**
-     * Select all records
+     * Convert array of associative arrays to objects
+     * @param array $params
      * @return array
      */
-    static public function selectAll(): array
+    abstract public static function toObjectMany(array $params): array;
+
+
+    /**
+     * Get all from table
+     * @return array|false|mixed
+     */
+    public static function getAll()
     {
-        return db::selectMany("SELECT * FROM " . self::getTable(), []);
+        $q = new QueryBuilder();
+        $query = $q->select()->from(self::getTable())->build();
+        return DB::selectMany($query, []);
     }
 
     /**
-     * Get record by Id
-     * @param $id
+     * Get all by id
+     * @param int $id
+     * @return array
+     */
+    public static function getById(int $id)
+    {
+        $q = new QueryBuilder();
+        $query = $q->select()->from(self::getTable())->where('id', '=')->build();
+        return DB::selectOne($query, ['id' => $id]);
+    }
+
+    /**
+     * Select many
+     * @param string $query
+     * @param array $params
      * @return array|false|mixed
      */
-    static public function selectById(int $id):array
+    public static function selectMany(string $query, array $params)
     {
-        $res = db::selectOne("SELECT * FROM " . self::getTable() . " WHERE id = :id", ['id' => $id]);
-        return $res === false ? [] : $res;
+        return DB::selectMany($query, $params);
+    }
+
+    /**
+     * Select one
+     * @param string $query
+     * @param array $params
+     * @return array
+     */
+    public static function selectOne(string $query, array $params)
+    {
+        return DB::selectOne($query, $params);
+    }
+
+    /**
+     * Delete by id
+     * @param $id
+     * @throws \PDOException
+     */
+    public static function delete($id)
+    {
+        $q = new QueryBuilder();
+        $query = $q->delete(self::getTable(), 'id')->build();
+        db::execute($query, ['id' => $id]);
+    }
+
+    /**
+     * DeleteWhere multiple
+     * @param $params
+     * @throws \PDOException
+     */
+    public static function deleteWhere($params)
+    {
+        $q = new QueryBuilder();
+        $query = $q->deleteWhere(self::getTable(), $params)->build();
+        db::execute($query, $params);
+    }
+
+    /**
+     * Insert into database
+     * @param array $params
+     * @return int
+     * @throws \PDOException
+     */
+    public static function insert(array $params): int|false
+    {
+        $columns = $params;//array_keys($params);
+        $q = new QueryBuilder();
+        $query = $q->insert(self::getTable(), $columns)->build();
+        return db::insert($query, $params);
+    }
+
+    /**
+     * Update records
+     * @param $query
+     * @param $params
+     * @param $ID
+     * @throws \PDOException
+     */
+    public static function update(array $params, int $id): void
+    {
+        $q = new QueryBuilder();
+        $query = $q->update(self::getTable(), $params, 'id')->build();
+        $params['id'] = $id;
+        db::execute($query, $params);
     }
 
     /**
@@ -82,99 +162,7 @@ abstract class Model
      */
     public static function exist(int $id): bool
     {
-        return count(self::selectById($id))>0;
+        return count(self::getById($id)) > 0;
     }
-
-    /**
-     * Select one record where field is equal to $value
-     * @param string $field
-     * @param $value
-     * @return array
-     */
-    static public function selectWhere(string $field, $value): array
-    {
-        $query = "SELECT * FROM " . self::getTable() . " WHERE " . $field . " = :" . $field;
-        return db::selectOne($query, [$field => $value]);
-    }  
-    
-    /**
-    * Select many records where field is equal to $value
-    * @param string $field
-    * @param $value
-    * @return array
-    */
-   static public function selectManyWhere(string $field, $value): array
-   {
-       $query = "SELECT * FROM " . self::getTable() . " WHERE " . $field . " = :" . $field;
-       return db::selectMany($query, [$field => $value]);
-   }
-
-    /**
-     * Delete record by id
-     * @param int $id
-     * @return false|void
-     * @throws PDOException
-     */
-    static public function delete(int $id)
-    {
-        try {
-            db::execute("DELETE FROM " . self::getTable() . " WHERE id = :id", ['id' => $id]);
-        } catch (PDOException $e) {
-            // foreign key constraint
-            if ($e->getCode() == 1005)
-                return false;
-            throw $e;
-        }
-    }
-
-    /**
-     * Execute sql command
-     * @param $query
-     * @param $params
-     */
-    static function execute(string $query, array $params)
-    {
-        db::execute($query, $params);
-    }
-
-
-    /**
-     * Insert data with associative array
-     * @param array $params
-     * @return false|int
-     * @throws PDOException
-     */
-    static function insert(array $params): int|false
-    {
-        $keys = array_keys($params);
-        $insert = implode(', ', $keys);
-        $values = implode(', ', array_map(function ($item) {
-            return ' :' . $item;
-        }, $keys));
-        try {
-            return db::insert("INSERT INTO " . self::getTable() . " ($insert) VALUES ($values)", $params);
-        } catch (PDOException $e) {
-            // integrity constraint violation
-            if ($e->getCode() == 23000)
-                return false;
-            throw $e;
-        }
-    }
-
-    /**
-     * Update records
-     * @param int $id
-     * @param array $params
-     */
-    static function update(int $id, array $params): void
-    {
-        $keys = array_keys($params);
-        $commaSeparated = implode(', ', array_map(function ($item) {
-            return $item . ' = :' . $item;
-        }, $keys));
-        $params['id'] = $id;
-        db::execute("UPDATE " . self::getTable() . " SET $commaSeparated WHERE id = :id", $params);
-    }
-
 
 }

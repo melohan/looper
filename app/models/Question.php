@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use App\Database\QueryBuilder;
 use App\Models\Exercise;
 use App\Models\Type;
 
 
 class Question extends Model
 {
-
     private int $id;
     private string $text;
     private Exercise $exercise;
@@ -21,7 +21,7 @@ class Question extends Model
      * @param int|null $exercise_id
      * @param int|null $type_id
      */
-    public function __construct(int $id = null, string $text = null, int $exercise_id = null, int $type_id = null)
+    public function __construct(int $id = null, string $text = "", int $exercise_id = null, int $type_id = null)
     {
         $this->exercise = new Exercise();
         $this->type = new Type();
@@ -71,7 +71,7 @@ class Question extends Model
 
     static function get(int $id): Question|null
     {
-        $selection = self::selectById($id);
+        $selection = self::getById($id);
         if (!count($selection)) {
             return null;
         }
@@ -80,19 +80,19 @@ class Question extends Model
 
     public function edit(): void
     {
-        $this->update($this->id, ['text' => $this->text, 'exercise_id' => $this->exercise->getId(), 'type_id' => $this->type->getId()]);
+        self::update(['text' => $this->text, 'exercise_id' => $this->exercise->getId(), 'type_id' => $this->type->getId()], $this->id);
     }
 
     public function remove(): void
     {
-        $this->delete($this->id);
+        self::delete($this->id);
     }
 
     public function create(): int|false
     {
         $result = parent::insert(['text' => $this->text, 'exercise_id' => $this->exercise->getId(), 'type_id' => $this->type->getId()]);
 
-        if ($result === false) {
+        if (!is_int($result)) {
             return false;
         } else {
             $this->id = $result;
@@ -100,11 +100,6 @@ class Question extends Model
         }
     }
 
-
-    /**
-     * Convert associative array to object
-     * @param array $params
-     */
     public static function toObject(array $params): Question|null
     {
         if (empty($params)) {
@@ -123,12 +118,6 @@ class Question extends Model
         return $o;
     }
 
-    /**
-     * Convert array of associative arrays to objects
-     * Convert many to
-     * @param array $params
-     * @return array
-     */
     public static function toObjectMany(array $params): array
     {
         $result = [];
@@ -137,4 +126,44 @@ class Question extends Model
         }
         return $result;
     }
+
+    /*   Object Specialized  Operations  */
+
+    /**
+     * Select where params equal value
+     * @param array $params
+     */
+    public static function getBy(array $params): Question|null
+    {
+        $q = new QueryBuilder();
+        $query = $q->select()->from('Questions')->whereEqual($params)->build();
+        $result = self::selectOne($query, $params);
+        return empty($result) ? null : self::toObject($result);
+    }
+
+    /**
+     * Select many where params equal value
+     * @param array $params
+     */
+    public static function getManyBy(array $params): array|null
+    {
+        $q = new QueryBuilder();
+        $query = $q->select()->from('Questions')->whereEqual($params)->build();
+        $result = self::selectMany($query, $params);
+        return empty($result) ? null : self::toObjectMany($result);
+    }
+
+    /**
+     * Get array object where params condition.
+     * @param array $params
+     * @return array|null
+     */
+    public static function getWhere(array $params): array|null
+    {
+        $q = new QueryBuilder();
+        $query = $q->select()->from('questions')->whereEqual($params)->build();
+        $result = self::selectMany($query, $params);
+        return empty($result) ? null : self::toObjectMany($result);
+    }
+
 }

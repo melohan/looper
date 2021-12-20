@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Models;
+namespace App\Database;
 
-define('RootFolder', str_replace('\\', '/', dirname(dirname(__DIR__))));
-include_once RootFolder . '/config/db.php';
+require_once(sprintf("%s/config/db.php", dirname($_SERVER['DOCUMENT_ROOT'])));
 
 use PDO;
 use PDOException;
@@ -84,11 +83,20 @@ class DB
      * @return int
      * @throws PDOException
      */
-    static function insert($query, array $params): int
+    static function insert($query, array $params): int|false
     {
         $db = self::getPDO();
         $stmt = $db->prepare($query);
-        $stmt->execute($params);
+        try {
+            $stmt->execute($params);
+        } catch (PDOException $e) {
+            // Integrity constraint violation check
+            if ($e->getCode() == 23000) {
+                return false;
+            }
+            // Throw other exception
+            throw $e;
+        }
         return $db->lastInsertId();
     }
 }

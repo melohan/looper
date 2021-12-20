@@ -19,7 +19,7 @@
 
 ### Prerequisites
 
-- PHP 8.0.0 or greater
+- PHP 8.1.0 or greater
 - MariaDB 10.6.4
 - Composer
 - npm
@@ -39,34 +39,16 @@ sass resources\scss:public\css
 
 To run looper project 
 ```shell
-cd public
-php -S localhost:8000
+php -S localhost:8080 -t public/
 ```
 
 ### Configuration
 
 #### Database
 
-Create from the root `config/db.php` and set up your database information in these constant :
-
-```php
-// config/db.php
-<?php 
-const HOST = '';
-const PORT = '';
-const USER = '';
-const PWD = '';
-const DB_NAME = 'looper';
-```
+Create `db.php` config file in config/ that conforms `example.db.php` file
 
 Then execute in your MySQL client the database from `/database/database.sql`
-
-### Run project
-
-```shell
-cd public\
-php -S localhost:8000
-```
 
 ## Test environment
 

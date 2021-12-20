@@ -1,16 +1,17 @@
 <?php
-$headerText = !empty($params['getExercise']['title']) ? 'Exercise : <b><a href="/question/fields/' . $params['getExercise']['id'] . '">' . $params['getExercise']['title'] . '</a></b>' : 'New exercise';
-$headerClass = "heading managing";
 
 $exercise = $params['exercise'];
 $types = $params['types'];
 
-$headerText = (!is_null($exercise) && $exercise->getTitle() != null) ? "Exercise: <span class='exercise-label'><a href='/question/fields/" . $exercise->getId() . "'>" . $exercise->getTitle() . "</a></span>" : "New exercise";
-
+$headerClass = "heading managing";
+$headerText =
+    (!is_null($exercise) && $exercise->getTitle()
+        != null) ? "Exercise: <span class='exercise-label'>
+<a href='/question/fields/" . $exercise->getId() . "'>" . htmlspecialchars($exercise->getTitle()) . "</a></span>" : "New exercise";
 
 ?>
 <div class="row">
-    <?php if (is_object($exercise) && !is_null($exercise)) : ?>
+    <?php if (isset($exercise) && !empty($exercise)) : ?>
         <section class="column">
             <h1>Fields</h1>
             <table class="records">
@@ -26,8 +27,8 @@ $headerText = (!is_null($exercise) && $exercise->getTitle() != null) ? "Exercise
                 <?php if (!empty($exercise->getQuestions())) : foreach ($exercise->getQuestions() as $key => $question) : ?>
 
                     <tr>
-                        <td><?= $question->getText(); ?></td>
-                        <td><?= $question->getType()->getName(); ?></td>
+                        <td><?= htmlspecialchars($question->getText()); ?></td>
+                        <td><?= htmlspecialchars($question->getType()->getName()); ?></td>
                         <td>
                             <a title="Edit" href="/question/edit/<?= $question->getId(); ?>">
                                 <i class="fa fa-edit"></i>
