@@ -1,22 +1,20 @@
 <?php
 $exercise = $params['exercise'];
-$headerText = ($exercise != null) ? "<span class='exercise-label'><a href='/answer/exercise/" . $exercise->getId() . "'>" . $exercise->getTitle() . "</a></span>" : "";
+$headerText = ($exercise != null) ? "<span class='exercise-label'><a href='/answer/exercise/" . $exercise->getId() . "'>" . htmlspecialchars($exercise->getTitle()) . "</a></span>" : "";
 $questions = $params['questions'];
 $headerClass = "heading results";
 const DOUBLE_FILLED = 50;
-$lastId = '';
-$users = \App\Models\User::getByExercise($exercise->getId());
+$users = $params['users'];
 ?>
-<?php if (is_array($questions) && count($questions) > 0): ?>
+<?php if (isset($questions) && !empty($questions)): ?>
     <table>
         <thead>
         <tr>
             <th>Take</th>
             <?php foreach ($questions as $question): ?>
                 <th>
-                    <a href="/answer/question/<?= $question->getId(); ?>"><?= $question->getText(); ?></a>
+                    <a href="/answer/question/<?= $question->getId(); ?>"><?= htmlspecialchars($question->getText()); ?></a>
                 </th>
-                <?php $lastId = $question->getId(); ?>
             <?php endforeach; ?>
         </tr>
         </thead>

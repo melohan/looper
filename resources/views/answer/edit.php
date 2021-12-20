@@ -1,6 +1,6 @@
 <?php
 $exercise = $params['exercise'];
-$headerText = ($exercise != null) ? "<span class='exercise-label'>" . $exercise->getTitle() . "</span>" : "";
+$headerText = ($exercise != null) ? "<span class='exercise-label'>" . htmlspecialchars($exercise->getTitle()) . "</span>" : "";
 $answers = $params['answers'];
 $headerClass = "heading answering";
 ?>
@@ -13,17 +13,17 @@ $headerClass = "heading answering";
 
         <div class="field">
             <?php foreach ($answers as $answer): ?>
-                <label for="fulfillment_answers_attributes__value"><?= $answer->getQuestion()->getText(); ?></label>
+                <label for="fulfillment_answers_attributes__value"><?= htmlspecialchars($answer->getQuestion()->getText()); ?></label>
                 <input type="hidden" value="<?= $answer->getQuestion()->getId(); ?>"
                        name="fulfillment[answers_attributes][][questionId]"
                 />
                 <?php if ($answer->getQuestion()->getType()->getId() == \App\models\QuestionType::SINGLE): ?>
-                    <input type="text" value="<?= $answer->getAnswer(); ?>"
+                    <input type="text" value="<?= htmlspecialchars($answer->getAnswer()); ?>"
                            name="fulfillment[answers_attributes][][value]"
                     />
                 <?php else: ?>
                     <textarea name="fulfillment[answers_attributes][][value]"
-                    ><?= $answer->getAnswer() ?></textarea>
+                    ><?= htmlspecialchars($answer->getAnswer()) ?></textarea>
                 <?php endif; ?>
             <?php endforeach; ?>
         </div>

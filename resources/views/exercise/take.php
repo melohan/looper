@@ -1,18 +1,18 @@
 <?php
 $headerClass = "heading answering";
+$exercises = $params['exercises'];
 ?>
 <ul class="ansering-list">
 
-    <li class="row">
-    </li>
+    <?php if (isset($exercises) && !empty($exercises)): ?>
 
-    <?php foreach ($params['allExercises'] as $key) : ?>
-        <li class="row">
-            <div class="column card">
-                <div class="title"><?= $key['title']; ?></div>
-                <a class="button" href="/exercise/fulfillments/<?= $key['id'] ?>">Take it</a>
-            </div>
-        </li>
-    <?php endforeach; ?>
-
+        <?php foreach ($exercises as $exercise) : ?>
+            <li class="row">
+                <div class="column card">
+                    <div class="title"><?= htmlspecialchars($exercise->getTitle()); ?></div>
+                    <a class="button" href="/exercise/fulfillments/<?= $exercise->getId(); ?>">Take it</a>
+                </div>
+            </li>
+        <?php endforeach; ?>
+    <?php endif; ?>
 </ul>
