@@ -3,7 +3,7 @@
 use App\Models\Exercise;
 use PHPUnit\Framework\TestCase;
 
-include_once "./config/db.php";
+require_once 'config/DB.php';
 
 class ExerciseTest extends TestCase
 {
@@ -60,20 +60,6 @@ class ExerciseTest extends TestCase
         self::assertNull($deleted);
     }
 
-    /**
-     * @covers \App\Models\Exercise::remove
-     */
-    public function testRemove_removeInvalidId_ThrowException()
-    {
-        $exercise = Exercise::get(1);
-        // Set up expectation
-        self::expectException('PDOException');
-        self::expectExceptionCode(23000);
-        self::expectExceptionMessage('Integrity constraint violation');
-        // Remove first exercise will throw and exception
-        // because it is used as a foreign key
-        $exercise->remove();
-    }
 
     /**
      * @covers  \App\Models\Exercise::create
@@ -96,7 +82,7 @@ class ExerciseTest extends TestCase
     public function testToObject_toObjectFromArray_newObject()
     {
         $fromGet = Exercise::get(1);
-        $params = Exercise::selectById(1);
+        $params = Exercise::getById(1);
         $fromToObject = Exercise::toObject($params);
         self::assertEquals($fromGet, $fromToObject);
     }

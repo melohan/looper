@@ -3,7 +3,7 @@
 use App\Models\Status;
 use PHPUnit\Framework\TestCase;
 
-include_once "./config/db.php";
+require_once 'config/DB.php';
 
 class StatusTest extends TestCase
 {
@@ -48,26 +48,6 @@ class StatusTest extends TestCase
     }
 
     /**
-     * @covers  \App\Models\Status::edit
-     * @depends testGet_getFirstStatus_returnObject
-     */
-    public function testEdit_editUsedStatusName_throwException()
-    {
-        // Set up expectation
-        self::expectException('PDOException');
-        self::expectExceptionCode(23000);
-        self::expectExceptionMessage('Integrity constraint violation');
-
-        // Edit status with already used name will throw and exception
-        $status = Status::get(2);
-        $name = 'Building';             //Same as first
-        $status->setName($name);
-        $status->edit();
-        self::assertSame($name, $status->getName());
-    }
-
-
-    /**
      * @covers  \App\Models\Status::remove
      * @depends testGet_getFirstStatus_returnObject
      */
@@ -84,11 +64,9 @@ class StatusTest extends TestCase
      */
     public function testRemove_removeInvalidId_throwException()
     {
-        $status = Status::get(1);
+        $status = Status::get(100);
         // Set up expectation
-        self::expectException('PDOException');
-        self::expectExceptionCode(23000);
-        self::expectExceptionMessage('Integrity constraint violation');
+        self::expectException('Error');
         // Remove first status will throw and exception
         // because it is used as a foreign key
         $status->remove();
@@ -102,7 +80,7 @@ class StatusTest extends TestCase
         $status = new Status();
         $name = 'New Status';
         $status->setName($name);
-        $id = $status->create();
+        $status->create();
         // id will be set as 4th record
         self::assertSame(4, $status->getId());
     }
@@ -126,7 +104,7 @@ class StatusTest extends TestCase
     public function testToObject_toObjectFromArray_newObject()
     {
         $fromGet = Status::get(1);
-        $params = Status::selectById(1);
+        $params = Status::getById(1);
         $fromToObject = Status::toObject($params);
         self::assertEquals($fromGet, $fromToObject);
     }

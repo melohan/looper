@@ -1,13 +1,12 @@
 <?php
 
-use App\Models\DB;
+use App\Database\DB;
 use PHPUnit\Framework\TestCase;
 
-include_once "./config/db.php";
+require_once 'config/DB.php';
 
 class DBTest extends TestCase
 {
-
     protected function setUp(): void
     {
         // TODO update db refresh mechanism
@@ -70,6 +69,5 @@ class DBTest extends TestCase
         $result = DB::insert("INSERT INTO Types (name) VALUES (:name)", ['name' => 'New Type']);
         self::assertSame(4, $result);
     }
-
 
 }

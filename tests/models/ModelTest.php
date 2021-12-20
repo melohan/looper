@@ -2,13 +2,12 @@
 
 /**
  * Test model through Status because this parent class is abstract
- *
  */
 
 use App\Models\Status;
 use PHPUnit\Framework\TestCase;
 
-include_once "./config/db.php";
+require_once 'config/DB.php';
 
 /**
  * @covers \App\Models\Status
@@ -23,107 +22,63 @@ class ModelTest extends TestCase
         shell_exec($command);
     }
 
-
     /**
-     * @covers \App\Models\Status::Select
+     * @covers \App\Models\Status::getAll
      */
-    public function testSelectOne_selectOneEntry_returnArray()
+    public function testGetAll_selectAllStatus_return2DArray()
     {
-        // The 1st and only entry is accessed through the case 0 because this function is based on select many
-        $arrayStatus = Status::select("SELECT * FROM Status WHERE id = :id", ['id' => 1])[0];
-        self::assertSame(['id' => '1', 'name' => 'Building'], $arrayStatus);
-    }
-
-    /**
-     * @covers \App\Models\Status::SelectAll
-     */
-    public function testSelectAll_selectAllStatus_return2DArray()
-    {
-        $all = Status::selectAll();
+        $all = Status::getAll();
         self::assertSame(3, count($all));
     }
 
     /**
-     * @covers \App\Models\Status::selectById
+     * @covers \App\Models\Status::getById
      */
-    public function testSelectById_SelectFirstStatus_returnArray()
+    public function testGetById_GetOne_returnArray()
     {
-        $arrayStatus = Status::selectById(1);
-        self::assertSame(['id' => '1', 'name' => 'Building'], $arrayStatus);
+        $status = Status::getById(1);
+        self::assertSame(['id' => '1', 'name' => 'Building'], $status);
     }
 
     /**
-     * @covers \App\Models\Status::selectById
+     * @covers \App\Models\Status::selectMany
      */
-    public function testSelectById_SelectInvalidStatus_returnEmptyArray()
+    public function testSelectMany_SelectAllStatus_return2DArray()
     {
-        $result = Status::selectById(10);
-        self::assertSame(0, count($result));
+        $all = Status::selectMany("SELECT * FROM status", []);
+        self::assertSame(3, count($all));
     }
 
     /**
-     * @covers \App\Models\Status::selectWhere
+     * @covers \App\Models\Status::selectOne
      */
-    public function testSelectWhere_statusNameEqualTo_returnArray()
+    public function testSelect_SelectOneById_returnArray()
     {
-        $arrayStatus = Status::selectWhere('name', 'Answering');    // correspond to id 2
-        // Check one field of this array
-        self::assertSame(2, intval($arrayStatus['id']));
-    }
-
-    /**
-     * @covers \App\Models\Status::selectWhere
-     */
-    public function testSelectWhere_selectInvalidStatus_returnEmptyArray()
-    {
-        $arrayStatus = Status::selectWhere('name', 'My test');    // correspond to id 2
-        self::assertSame(0, count($arrayStatus));
+        $status = Status::selectOne('SELECT * FROM Status WHERE id = :id', ['id' => 1]);
+        self::assertSame(['id' => '1', 'name' => 'Building'], $status);
     }
 
     /**
      * @covers  \App\Models\Status::delete
-     * @depends testSelectById_SelectFirstStatus_returnArray
+     * @depends testGetById_GetOne_returnArray
      */
-    public function testDelete_deleteStatus_statusDeleted()
+    public function testDelete_deleteById_statusDeleted()
     {
         Status::delete(3);
-        $arrayStatus = Status::selectById(3);
+        $arrayStatus = Status::getById(3);
         self::assertSame(0, count($arrayStatus));
     }
 
-    /**
-     * @covers  \App\Models\Status::delete
-     * @depends testSelectById_SelectFirstStatus_returnArray
-     */
-    public function testDelete_deleteInvalidId_throwException()
-    {
-        // Set up expectation
-        self::expectException('PDOException');
-        self::expectExceptionCode(23000);
-        self::expectExceptionMessage('Integrity constraint violation');
-        Status::delete(1);          // Cannot be deleted, this id is used as a foreign key
-    }
 
     /**
-     * @covers  \App\Models\Status::execute
-     * @depends testSelectById_SelectFirstStatus_returnArray
+     * @covers  \App\Models\Status::deleteWhere
+     * @depends testGetById_GetOne_returnArray
      */
-    public function testExecute_executeDelete_entryDeleted()
+    public function testDeleteWhere_deleteById_statusDeleted()
     {
-        Status::execute("DELETE FROM Status WHERE id = :id", ['id' => 3]);
-        $arrayStatus = Status::selectById(3);
+        Status::deleteWhere(['id' => 3]);
+        $arrayStatus = Status::getById(3);
         self::assertSame(0, count($arrayStatus));
-    }
-
-    /**
-     * @covers  \App\Models\Status::execute
-     * @depends testSelectById_SelectFirstStatus_returnArray
-     */
-    public function testExecute_executeUpdate_entryUpdated()
-    {
-        Status::execute('UPDATE status SET name = "Updated" WHERE id = :id', ['id' => 1]);
-        $arrayStatus = Status::selectById(1);
-        self::assertSame('Updated', $arrayStatus['name']);
     }
 
     /**
@@ -136,21 +91,13 @@ class ModelTest extends TestCase
     }
 
     /**
-     * @covers \App\Models\Status::insert
-     */
-    public function testInsert_insertInvalid_returnFalse()
-    {
-        self::assertFalse(Status::insert(['name' => 'Answering']));
-    }
-
-    /**
      * @covers  \App\Models\Status::update
-     * @depends testSelectById_SelectFirstStatus_returnArray
+     * @depends testGetById_GetOne_returnArray
      */
     public function testExecute_updateStatus_entryUpdated()
     {
-        Status::update(1, ['name' => 'Updated']);
-        $arrayStatus = Status::selectById(1);
+        Status::update(['name' => 'Updated'], 1);
+        $arrayStatus = Status::getById(1);
         self::assertSame('Updated', $arrayStatus['name']);
     }
 

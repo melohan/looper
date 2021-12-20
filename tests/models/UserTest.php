@@ -3,7 +3,7 @@
 use App\Models\User;
 use PHPUnit\Framework\TestCase;
 
-include_once "./config/db.php";
+require_once 'config/DB.php';
 
 class UserTest extends TestCase
 {
@@ -95,7 +95,7 @@ class UserTest extends TestCase
     public function testToObject_toObjectFromArray_newObject()
     {
         $fromGet = User::get(1);
-        $params = User::selectById(1);
+        $params = User::getById(1);
         $fromToObject = User::toObject($params);
         self::assertEquals($fromGet, $fromToObject);
     }
