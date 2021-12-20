@@ -292,23 +292,6 @@ VALUES ("Answering");
 INSERT INTO looper.status (name)
 VALUES ("Closed");
 
---  ----------------- Types insertion ----------------- --
-
-INSERT INTO looper.types (name)
-VALUES ("Single line text");
-INSERT INTO looper.types (name)
-VALUES ("List of single lines");
-INSERT INTO looper.types (name)
-VALUES ("Multi-line text");
-
---  ----------------- Status insertion ----------------- --
-
-INSERT INTO looper.status (name)
-VALUES ("Building");
-INSERT INTO looper.status (name)
-VALUES ("Answering");
-INSERT INTO looper.status (name)
-VALUES ("Closed");
 
 INSERT INTO `exercises` (`id`, `title`, `status_id`)
 VALUES (1, 'Culture générale', 1),
@@ -318,6 +301,9 @@ VALUES (1, 'Culture générale', 1),
        (5, 'Chimie culture générale', 2),
        (6, 'Orthographe', 1),
        (7, 'Quizz de culture générale niveau Expert', 2);
+
+
+--  ----------------- Questions insertion ----------------- --
 
 INSERT INTO `questions` (`id`, `text`, `exercise_id`, `type_id`)
 VALUES (1, 'Quel est le plus grand lac de Suisse ?', 1, 2),
@@ -345,11 +331,13 @@ VALUES (1, 'Quel est le plus grand lac de Suisse ?', 1, 2),
        (22, 'Quel philosophe a écrit « Les origines du totalitarisme » et « La crise de la culture » ? ', 7, 3);
 
 
+--  ----------------- Users insertion ----------------- --
 INSERT INTO `users` (`id`, `name`)
 VALUES (1, '2021-12-20 09:45:47 UTC'),
        (2, '2021-12-20 09:46:05 UTC'),
        (3, '2021-12-20 09:48:31 UTC');
 
+--  ----------------- Answers insertion ----------------- --
 INSERT INTO `answers` (`id`, `question_id`, `user_id`, `answer`)
 VALUES (1, 12, 1, 'theirs'),
        (2, 13, 1, 'go'),
