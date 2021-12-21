@@ -37,7 +37,8 @@ npm i
 sass resources\scss:public\css
 ```
 
-To run looper project 
+To run looper project
+
 ```shell
 php -S localhost:8080 -t public/
 ```
@@ -54,6 +55,12 @@ Then execute in your MySQL client the database from `/database/database.sql`
 
 Update `config/db.php` with your test environnment, testDataBase.sql will drop current looper database for each
 unitTests.
+
+Because Unit tests are run with theses commands, you'll need to replace this path:
+
+`require_once(sprintf("%s/config/db.php", dirname($_SERVER['DOCUMENT_ROOT'])));`
+
+To this one: `require_once './config/db.php';` in  `app/database/DB.php`
 
 Execute these following commands:
 > The parent model is abstracte and tested through its children.
