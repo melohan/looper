@@ -1,8 +1,5 @@
 # Exercise Looper
 
----
-
-
 > This website is a reproduction of
 > [Exercise Looper](https://stormy-plateau-54488.herokuapp.com)
 
@@ -16,7 +13,6 @@ Looper is a website for creating exercises and answering questions. It also allo
 
 ## Table of contents
 
----
 
 1. [Prerequisites](#prerequisites)
     1. [Built with](#built-with)
@@ -34,7 +30,6 @@ Looper is a website for creating exercises and answering questions. It also allo
 
 ## Prerequisites
 
----
 
 ### Built with
 
@@ -45,7 +40,6 @@ Looper is a website for creating exercises and answering questions. It also allo
 
 ## Setting up Dev
 
----
 
 ### 1 Installation
 
@@ -88,8 +82,6 @@ php -S localhost:8080 -t public/
 
 ## Documentation
 
----
-
 ### Contribute to the project
 
 - [Create new content, controller or models](documentation/ContributeToLooper.md)
@@ -109,7 +101,6 @@ php -S localhost:8080 -t public/
 
 ## Test environment
 
----
 Update `config/db.php` with your test environnment, testDataBase.sql will drop current looper database for each
 unitTests.
 
