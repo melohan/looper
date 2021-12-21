@@ -43,7 +43,7 @@ class AnswerController extends Controller
     {
         $exercise = Exercise::get($id);
         $questions = Question::getManyBy(['exercise_id' => $id]);
-        $users = User::getByExercise($exercise->getId());
+        $users = !is_null($exercise) ? User::getByExercise($exercise->getId()) : null;
         return $this->view('answer.exercise', compact('exercise', 'questions', 'users'));
     }
 
