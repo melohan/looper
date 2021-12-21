@@ -38,7 +38,7 @@ $(document).ready(function () {
   changeStatus.addEventListener("click", function () { 
     if (!confirm(changeStatus.dataset.confirm)) return false;
       $.post($(this).data("href"), { id: ($('tr').length > 1) ? $(this).data("val") : 1,status: $(this).data("status") }, function () {
-       (window.location.href.includes("question")) && (changeStatus.dataset.method =="changeStatus") && ($('tr').length > 1) ? window.location.href = '/' : location.reload();
+       (window.location.href.includes("question")) && (changeStatus.dataset.method =="changeStatus") && ($('tr').length > 1) ? window.location.href = '/exercise/manage' : location.reload();
       }).fail(function (result) {
 
         alert("Got error");
