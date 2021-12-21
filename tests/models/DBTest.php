@@ -40,7 +40,7 @@ class DBTest extends TestCase
     public function testSelect_selectOneUser_returnArray()
     {
         $result = DB::select("SELECT * FROM Users WHERE id = :id", ['id' => 1], false);
-        self::assertSame(['id' => '1', 'name' => 'User 1'], $result);
+        self::assertSame(['id' => 1, 'name' => 'User 1'], $result);
     }
 
     /**
@@ -58,7 +58,7 @@ class DBTest extends TestCase
     public function testSelectOne_selectOneUser_returnArray()
     {
         $result = DB::selectOne("SELECT * FROM Users WHERE name = :name", ['name' => 'User 3']);
-        self::assertSame(['id' => '3', 'name' => 'User 3'], $result);
+        self::assertSame(['id' => 3, 'name' => 'User 3'], $result);
     }
 
     /**
