@@ -102,8 +102,10 @@ class User extends Model
         return $result;
     }
 
-    /*   Object Specialized  Operations  */
-
+    /*
+       Object Specialized  Operations
+       TODO write Unit tests
+       */
     /**
      * Return array object of users by exercise id
      * @param int $exerciseId

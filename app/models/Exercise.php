@@ -111,7 +111,10 @@ class Exercise extends Model
         return $result;
     }
 
-    /*   Object Specialized  Operations  */
+    /*
+    Object Specialized  Operations
+    TODO write Unit tests
+    */
 
 
     /**

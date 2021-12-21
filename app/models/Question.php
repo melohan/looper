@@ -127,7 +127,10 @@ class Question extends Model
         return $result;
     }
 
-    /*   Object Specialized  Operations  */
+    /*
+      Object Specialized  Operations
+      TODO write Unit tests
+      */
 
     /**
      * Select where params equal value
