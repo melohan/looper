@@ -1,7 +1,7 @@
 <?php
 $exercise = $params['exercise'];
 
-$text = ($exercise != null) ? $exercise->getTitle() : "";
+$text = ($exercise != null) ? "Exercise: " . $exercise->getTitle() : "";
 $cssClass = "heading answering";
 
 $questions = isset($params['exercise']) ? $exercise->getQuestions() : null;
