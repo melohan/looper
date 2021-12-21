@@ -2,8 +2,8 @@
 $cssClass = "heading managing";
 $text = "Exercice: ";
 $useLink = (!is_null($params['question']) && $params['question']->getText() != null);
-$textLink = (!is_null($params['question']) && $params['question']->getText() != null) ? $params['question']->getText() : '';
-$urlLink = (!is_null($params['question']) && $params['question']->getText() != null) ? '/question/fields/' . $params['question']->getId() : '';
+$textLink = (!is_null($params['question']) && $params['question']->getText() != null) ? $params['question']->getExercise()->getTitle() : '';
+$urlLink = (!is_null($params['question']) && $params['question']->getText() != null) ? '/question/fields/' . $params['question']->getExercise()->getId() : '';
 
 $question = $params['question'];
 $types = $params['types'];
