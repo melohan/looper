@@ -21,7 +21,6 @@ $router->get('/exercise/new', 'App\Controllers\exerciseController@index');
 $router->get('/exercise/fulfillments/:id', 'App\Controllers\exerciseController@fulfillments');
 $router->get('/exercise/manage', 'App\Controllers\exerciseController@manage');
 $router->post('/exercise/create', 'App\Controllers\exerciseController@create');
-$router->post('/exercise/fulfillments', 'App\Controllers\exerciseController@fulfillments');
 $router->post('/exercise/delete/', 'App\Controllers\exerciseController@delete');
 $router->post('/exercise/update/', 'App\Controllers\exerciseController@update');
 
