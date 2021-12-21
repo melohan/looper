@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\Exercise;
+use App\models\ExerciseStatus;
 use App\Models\Question;
 use App\Models\Type;
 
@@ -37,13 +38,19 @@ class QuestionController extends Controller
      */
     function update($id)
     {
-        if (isset($_POST['field']['label']) && isset($_POST['typeId'])) {
-            $typeId = $_POST['typeId'];
-            $text = $_POST['field']['label'];
-            $question = Question::get($id);
+        $question = Question::get($id);
+        if (!is_null($question) && (isset($_POST['field']['label']) || isset($_POST['typeId']))
+            && $question->getExercise()->getStatus()->getId() == ExerciseStatus::BUILDING
+        ) {
+            $typeId = isset($_POST['typeId']) ? $_POST['typeId'] : $question->getType()->getId();
+            $text = isset($_POST['field']['label']) ? $_POST['field']['label'] : $question->getText();
             $question->getType()->setId($typeId);
             $question->setText($text);
             $question->edit();
+        }
+        // If id is changed in url
+        if (is_null($question)) {
+            header('Location: /page/error/404');
         }
         header('Location: /question/fields/' . $question->getExercise()->getId());
     }
