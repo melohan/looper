@@ -8,3 +8,4 @@ const PORT = '3306';
 const USER = '';
 const PWD = '';
 const DB_NAME = 'looper';
+const DB_CHARSET = 'utf8mb4';

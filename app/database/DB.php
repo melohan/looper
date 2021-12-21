@@ -17,7 +17,7 @@ class DB
      */
     static function getPDO(): PDO
     {
-        $pdo = new PDO('mysql:host=' . HOST . ';port=' . PORT . ';dbname=' . DB_NAME, USER, PWD);
+        $pdo = new PDO('mysql:host=' . HOST . ';port=' . PORT . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET . ';', USER, PWD);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         return $pdo;
     }
