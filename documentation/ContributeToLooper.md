@@ -1,7 +1,5 @@
 # Create new content
 
----
-
 ## Create a new controller
 
 1) Create in `app/controllers/` ExampleController.php file.
