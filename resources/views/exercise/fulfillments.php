@@ -1,9 +1,13 @@
 <?php
 $exercise = $params['exercise'];
-$headerText = ($exercise != null) ? "<span class='exercise-label'>" . htmlspecialchars($exercise->getTitle()) . "</span>" : "";
+
+$text = ($exercise != null) ? "Exercise: " . $exercise->getTitle() : "";
+$cssClass = "heading answering";
+
 $questions = isset($params['exercise']) ? $exercise->getQuestions() : null;
-$headerClass = "heading answering";
 ?>
+
+
 <?php if (isset($questions) && !empty($questions)): ?>
     <h1>Your take</h1>
     <p>If you'd like to come back later to finish, simply submit it with blanks</p>

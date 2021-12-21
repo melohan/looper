@@ -1,5 +1,6 @@
 <?php
-$headerClass = "heading answering";
+$cssClass = "heading answering";
+$text = "";
 $exercises = $params['exercises'];
 ?>
 <ul class="ansering-list">

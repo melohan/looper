@@ -1,6 +1,7 @@
 <?php
-$headerText = "";
-$headerClass = "heading results";
+$cssClass = "heading results";
+$text = "";
+
 $building = $params['building'];
 $answering = $params['answering'];
 $closed = $params['closed'];
