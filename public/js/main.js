@@ -1,6 +1,6 @@
 $(document).ready(function () {
   /**
-   * delete element
+   * delete exercise element
    */
   document.querySelectorAll('a[data-method="delete"]').forEach(item => {
     item.addEventListener("click", function () { 
@@ -16,7 +16,7 @@ $(document).ready(function () {
   });
   
   /**
-   * change status
+   * change exercise status
    */
   document.querySelectorAll('a[data-method="put"]').forEach(item => {
     item.addEventListener("click", function () { 
@@ -28,4 +28,19 @@ $(document).ready(function () {
       });
     })
   });
+  
+  
+  /**
+  * change new exercise status
+  */
+
+  var changeStatus = document.querySelector('a[data-method="changeStatus"]');
+  changeStatus.addEventListener("click", function () { 
+      $.post($(this).data("href"), { id: ($('tr').length > 1) ? $(this).data("val") : 1,status: $(this).data("status") }, function () {
+       (window.location.href.includes("question")) && (changeStatus.dataset.method =="changeStatus") && ($('tr').length > 1) ? window.location.href = '/' : location.reload();
+      }).fail(function (result) {
+
+        alert("Got error");
+      });
+    });
 });
