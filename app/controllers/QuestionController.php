@@ -57,18 +57,26 @@ class QuestionController extends Controller
 
     /**
      * Create question and redirect to /question/fields page of created question.
+     * If there is an issue with the form post, this method return to home page
      */
     function create()
     {
-        $name = $_POST['name'];
-        $exerciseId = $_POST['exerciseId'];
-        $typeId = $_POST['typeId'];
-        $question = new Question();
-        $question->setText($name);
-        $question->getType()->setId($typeId);
-        $question->getExercise()->setId($exerciseId);
-        $question->create();
-        header('Location: /question/fields/' . $exerciseId);
+        if (isset($_POST['exerciseId'])
+            && Exercise::exist($_POST['exerciseId'])
+            && isset($_POST['typeId'])
+            && Type::exist($_POST['typeId'])) {
+            $name = $_POST['name'] ?: "";
+            $exerciseId = $_POST['exerciseId'];
+            $typeId = $_POST['typeId'];
+            $question = new Question();
+            $question->setText($name);
+            $question->getType()->setId($typeId);
+            $question->getExercise()->setId($exerciseId);
+            $question->create();
+            header('Location: /question/fields/' . $exerciseId);
+        } else {
+            header('Location: /');
+        }
     }
 
     /**
