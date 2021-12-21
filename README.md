@@ -13,7 +13,6 @@ Looper is a website for creating exercises and answering questions. It also allo
 
 ## Table of contents
 
-
 1. [Prerequisites](#prerequisites)
     1. [Built with](#built-with)
 2. [Setting up Dev](#setting-up-dev)
@@ -30,7 +29,6 @@ Looper is a website for creating exercises and answering questions. It also allo
 
 ## Prerequisites
 
-
 ### Built with
 
 - PHP 8.1.0
@@ -39,7 +37,6 @@ Looper is a website for creating exercises and answering questions. It also allo
 - npm 8.1.2
 
 ## Setting up Dev
-
 
 ### 1 Installation
 
@@ -97,7 +94,7 @@ php -S localhost:8080 -t public/
 
 ### UML schema
 
-- [UML](documentation/uml/models.mdj)
+- [UML](documentation/uml/models.PNG)
 
 ## Test environment
 
