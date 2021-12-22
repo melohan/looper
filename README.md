@@ -12,6 +12,11 @@ goal is simply to be able to observe the answers of the users.
 - [Ohan Mélodie](https://github.com/melohan)
 - [Samoutphonh Souphakone](https://github.com/Souphakone)
 
+### Technical documentation
+
+Here you can find the [technical documentation](documentation/technical/fr_technical_documentation.md) needed to take
+over the project.
+
 ## Table of contents
 
 1. [Prerequisites](#prerequisites)
@@ -32,7 +37,7 @@ goal is simply to be able to observe the answers of the users.
 
 ### Built with
 
-- PHP 8.1.0
+- PHP 8.0.0
 - MariaDB 10.6.4
 - Composer 2.1.14
 - npm 8.1.2
