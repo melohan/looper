@@ -12,16 +12,16 @@ namespace App\Controllers;
 
 class ExampleController extends Controller
 {
-    // This page will return the view: yourPhpView
-    // in the sub directory: yourDirectory
+    // This page will return the view: exampleOne
+    // in the sub directory: example
     function exampleOne(){
         return $this->view('example.exampleOne');
     }
     
     // This one will send variables (array or simple type) to your view
     function exampleTwo($getParameter){
-        $myVar = [];
-        return $this->view('example.exampleTwo', compact('myVar'));
+        $myArray = [];
+        return $this->view('example.exampleTwo', compact('myArray'));
     }
 }
 ```

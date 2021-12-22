@@ -3,8 +3,9 @@
 > This website is a reproduction of
 > [Exercise Looper](https://stormy-plateau-54488.herokuapp.com)
 
-
-Looper is a website for creating exercises and answering questions. It also allows you to view the different answers.
+The aim of this project is to provide a platform for creating questions, answering them as a visitor and then consulting
+the different answers. It can be used for schools in the case of quizzes, it can also be used for surveys etc... The
+goal is simply to be able to observe the answers of the users.
 
 ### Authors
 
@@ -53,7 +54,6 @@ Execute these following command in your project directory:
 git clone https://github.com/melohan/looper.git
 cd looper/
 git checkout develop
-touch config/db.php
 composer i
 npm i
 sass resources\scss:public\css
@@ -81,20 +81,20 @@ php -S localhost:8080 -t public/
 
 ### Contribute to the project
 
-- [Create new content, controller or models](documentation/ContributeToLooper.md)
+- [Create new content, controller or models](documentation/technical/createNewContent.md)
 
 ### Route of this project
 
-- [Route and description](documentation/Routes.md)
+- [Route and description](documentation/technical/projectRoutes.md)
 
 ### Database
 
-- [MLD](documentation/db/MLD.PNG)
-- [MCD](documentation/db/MCD_CHEN.PNG)
+- [MLD](documentation/conception/db/MLD.PNG)
+- [MCD](documentation/conception/db/MCD_CHEN.png)
 
 ### UML schema
 
-- [UML](documentation/uml/models.PNG)
+- [UML](documentation/conception/uml/models.PNG)
 
 ## Test environment
 
