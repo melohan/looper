@@ -24,12 +24,12 @@ Composer, NPM, cmder, PHP 8, et d'un éditeur de code (Par exemple Visual Studio
 
 Document de conception de la base de donnée:
 
-- [MLD](documentation/conception/db/MLD.PNG)
-- [MCD](documentation/conception/db/MCD_CHEN.png)
+- [MLD](../conception/db/MLD.PNG)
+- [MCD](../conception/db/MCD_CHEN.png)
 
 Diagramme de classe des données (QueryBuilder, Model, DB)
 
-- [UML](documentation/conception/uml/models.PNG)
+- [UML](../conception/uml/models.PNG)
 
 ## Composants et Architecture
 
