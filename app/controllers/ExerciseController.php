@@ -76,49 +76,40 @@ class ExerciseController extends Controller
     }
 
     /**
-     *  Update exercise status.
+     *  Update exercise status according to current status.
      *  This content is called by JS file.
-     * @return Exception|void
      */
     function update()
     {
-        try {
-            if (isset($_POST['id']) && isset($_POST['status'])) {
-                $id = intval($_POST['id']);
-                $exercise = Exercise::get($_POST['id']);
+        if (isset($_POST['id']) && isset($_POST['status'])) {
+            $id = intval($_POST['id']);
+            $exercise = Exercise::get($id);
+            if (!is_null($exercise)) {
                 if ($exercise->getStatus()->getId() == ExerciseStatus::BUILDING) {
-                    $exercise->getStatus()->setId($_POST['status']);
+                    $exercise->getStatus()->setId(ExerciseStatus::ANSWERING);
                     $exercise->setId($id);
                     $exercise->editStatus();
-                } else {
-                    return throw new Exception("Edition not allowed");
+                } elseif ($exercise->getStatus()->getId() == ExerciseStatus::ANSWERING) {
+                    $exercise->getStatus()->setId(ExerciseStatus::CLOSED);
+                    $exercise->setId($id);
+                    $exercise->editStatus();
                 }
             }
-        } catch
-        (Exception $e) {
-            return $e;
         }
     }
 
     /**
-     *  Delete exercise status.
+     *  Delete exercise by status buildind or closed.
      *  This content is called by JS file.
-     * @return string|void
+     * @return string
      */
     function delete()
     {
-        try {
-            if (isset($_POST['id'])) {
-                $id = intval($_POST['id']);
-                $exercise = Exercise::get($id);
-                if ($exercise->getStatus()->getId() == ExerciseStatus::BUILDING
-                    || $exercise->getStatus()->getId() == ExerciseStatus::CLOSED)
-                    $exercise->remove();
-                else
-                    return "error";
-            }
-        } catch (Exception $e) {
-            return "error";
+        if (isset($_POST['id'])) {
+            $id = intval($_POST['id']);
+            $exercise = Exercise::get($id);
+            if (!is_null($exercise) && ($exercise->getStatus()->getId() == ExerciseStatus::BUILDING || $exercise->getStatus()->getId() == ExerciseStatus::CLOSED))
+                $exercise->remove();
         }
     }
 }
