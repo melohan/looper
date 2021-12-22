@@ -79,7 +79,7 @@ php -S localhost:8080 -t public/
 
 ### Technical documentation
 
-- [Technical documentation](documentation/technical/fr_technical_documentation.md)
+- [Technical documentation](documentation/technical/technical_documentation.md)
 
 ### Contribute to the project
 
