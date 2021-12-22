@@ -6,9 +6,19 @@ Proposer une plateforme permettant de créer des questions, d'y répondre en tan
 différentes réponses. Il peut être destiné à des écoles dans le cas de quizz, il peut aussi être utilisé pour des
 sondages etc... Le but étant simplement de pouvoir observer les réponses des utilisateurs.
 
+Annexe: [Guide de création de contenu](documentation/technical/createNewContent.md)
+
 ## Dans quel contexte (technique)
 
 Le fonctionnement du projet est garanti en local avec un serveur `PHP 8.0` et Serveur SQL `MariaDB 10.6.4`.
+
+## Prérequis pour reprendre ce projet
+
+PHP 8.0, MySQL, Composer, NPM, connaître le pattern MVC et le fonctionnement du routeur.
+
+## Ce qu'il faut installer:
+
+Composer, NPM, cmder, PHP 8, et d'un éditeur de code (Par exemple Visual Studio Code ou PHPStorm)
 
 ## Données manipulées par ce site
 
@@ -58,18 +68,10 @@ interrompue ou a échoué, index va rediriger sur une erreur 500.
 
 ## Navigation et routes
 
-Plus de détails sur les routes actuelle [détails](documentation/technical/projectRoutes.md)
+Plus de détails sur les routes actuelles [détails](documentation/technical/projectRoutes.md)
 
 Présentement et de manière générale, les URLs sont construits en respectant la logique suivante:
 `controlleur/action/variable`
-
-## Prérequis pour reprendre ce projet
-
-PHP 8.0, MySQL, Composer, NPM, connaître le pattern MVC et le fonctionnement du routeur.
-
-## Ce qu'il faut installer:
-
-Composer, NPM, cmder, PHP 8, et d'un éditeur de code (Par exemple Visual Studio Code ou PHPStorm)
 
 ## Astuces employées
 
