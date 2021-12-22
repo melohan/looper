@@ -50,7 +50,7 @@ This site uses an MVC (Model-View-Controller) architecture. It is a mimic of Lar
 |---|---|---|
 |View|`resources/views/`| Contains main layout, it includes all other views.|
 |DB Connection|`config/db.php`| Database consts file, it is used in UnitTests and by `app/database/DB.php`|
-|Const and paths file|`config/.env.php`||
+|Const and paths file|`config/.env.php`|Contains VIEW, SCRIPT and PROJECT_ROOT consts|
 |Routes|`public/index.php`|All routes are defined at this location|
 |Scripts (JS)|`public/js/main.js`|Buttons with events are managed in this file|
 
@@ -67,7 +67,7 @@ or if it failed, the index will redirect to a 500 internal server error.
 
 ## Navigation and routes
 
-More details on the current routes [details](documentation/technical/projectRoutes.md)
+More details on the current routes [details](../technical/projectRoutes.md)
 
 Currently, and in general, URLs are constructed according to the following logic: `controller/action/variable`
 Some more complex URLs are detailed in the routes file.
@@ -77,7 +77,7 @@ Some more complex URLs are detailed in the routes file.
 ### Tip #1: Post an array
 
 In the answers page of an exercise, we use an array with the following form as the input tag name
-fullfillment[answers_attributes][][field_id]`.
+`fullfillment[answers_attributes][][field_id]`.
 
 ```html
 <textarea name="fulfillment[answers_attributes][][value]"></textarea>
