@@ -12,11 +12,6 @@ goal is simply to be able to observe the answers of the users.
 - [Ohan Mélodie](https://github.com/melohan)
 - [Samoutphonh Souphakone](https://github.com/Souphakone)
 
-### Technical documentation
-
-Here you can find the [technical documentation](documentation/technical/fr_technical_documentation.md) needed to take
-over the project.
-
 ## Table of contents
 
 1. [Prerequisites](#prerequisites)
@@ -27,10 +22,8 @@ over the project.
     3. [Complete configuration file](#3-complete-configuration-file)
     4. [Run looper project](#4-run-looper-project)
 3. [Documentation](#documentation)
-    1. [Contribute to the project](#contribute-to-the-project)
-    2. [Route of this project](#route-of-this-project)
-    3. [Database](#database)
-    4. [UML schma](#uml-schema)
+    1. [Technical documentation](#technical-documentation)
+    2. [Contribute to the project](#contribute-to-the-project)
 4. [Test environment](#test-environment)
 
 ## Prerequisites
@@ -84,22 +77,13 @@ php -S localhost:8080 -t public/
 
 ## Documentation
 
+### Technical documentation
+
+- [Technical documentation](documentation/technical/fr_technical_documentation.md)
+
 ### Contribute to the project
 
 - [Create new content, controller or models](documentation/technical/createNewContent.md)
-
-### Route of this project
-
-- [Route and description](documentation/technical/projectRoutes.md)
-
-### Database
-
-- [MLD](documentation/conception/db/MLD.PNG)
-- [MCD](documentation/conception/db/MCD_CHEN.png)
-
-### UML schema
-
-- [UML](documentation/conception/uml/models.PNG)
 
 ## Test environment
 
