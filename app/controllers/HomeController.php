@@ -14,6 +14,7 @@ class HomeController extends Controller
 
     /**
      * Return error page according to the error code
+     * TODO Make a single view by returning the error code variable
      * @param int $code
      */
     function error(int $code)

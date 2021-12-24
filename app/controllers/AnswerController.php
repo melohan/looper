@@ -10,7 +10,7 @@ use App\Models\User;
 class AnswerController extends Controller
 {
     /**
-     * Return user view depending of answers by user and exercise id
+     * Return answers by user and exercise id
      * If user and answers doesn't exist it returns an empty page.
      * @param int $userId
      * @param int $exerciseId
@@ -24,19 +24,17 @@ class AnswerController extends Controller
 
     /**
      * Return answers by question id
-     * If user id doesn't exist or doesn't have any answers it returns an empty page.
      * @param int $id
      */
     function question(int $id)
     {
-        $exercise = Question::exist($id) ? Answer::getExercisesBy(['question_id' => $id]) : null;
-        $answers = Question::exist($id) ? Answer::getAnswersBy(['question_id' => $id]) : [];
+        $exercise = Answer::getExercisesBy(['question_id' => $id]);
+        $answers = Answer::getAnswersBy(['question_id' => $id]);
         return $this->view('answer.question', compact('answers', 'exercise'));
     }
 
     /**
      * Return answers by exercise id
-     * If user id doesn't exist or doesn't have any answers it returns an empty page.
      * @param int $id
      */
     function exercise(int $id)
@@ -88,7 +86,7 @@ class AnswerController extends Controller
     }
 
     /**
-     * Update answers with posted value from POST request.
+     * Update answers with posted value and redirect to edition form.
      * Once data is updated, it redirects to edition page.
      * @param int $exerciseId
      * @param int $userId
