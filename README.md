@@ -7,6 +7,8 @@ The aim of this project is to provide a platform for creating questions, answeri
 the different answers. It can be used for schools in the case of quizzes, it can also be used for surveys etc... The
 goal is simply to be able to observe the answers of the users.
 
+You can consult the list of features of this project [here](documentation/technical/ExerciseLooper-Features.md)
+
 ### Authors
 
 - [Ohan Mélodie](https://github.com/melohan)
