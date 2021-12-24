@@ -7,8 +7,6 @@ use App\Models\Exercise;
 use App\models\ExerciseStatus;
 use App\Models\Question;
 use App\Models\Status;
-use Exception;
-use phpDocumentor\Reflection\DocBlock\Tags\Throws;
 
 class ExerciseController extends Controller
 {
