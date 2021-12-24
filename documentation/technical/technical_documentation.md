@@ -1,24 +1,8 @@
 # Technical documentation
 
-## Purpose of the site
-
-To propose a platform allowing to create questions, let visitors answers to them and finally, to consult the different
-answers. It can be used for schools, it can also be used for surveys etc... The goal is simply to be able to observe the
-answers of the users.
-
-Annex: [Content Creation Guide](../documentation/technical/createNewContent.md)
-
 ## Context (technical)
 
 The project is guaranteed to run locally with a `PHP 8.0.10` server and `MariaDB 10.6.4` SQL Server.
-
-## Prerequisites for taking over this project
-
-PHP 8.0, MySQL, Composer, NPM, know the MVC pattern and how the router works. (See README.md)
-
-## What to install
-
-Composer, NPM, cmder, PHP 8, and a code editor (See README.md)
 
 ## Data handled by this site
 
@@ -107,3 +91,11 @@ request confirmation.
     item.addEventListener("click", function () {
         if (!confirm(item.dataset.confirm)) return false;
    ```
+
+### Tip # 4: Use abstract class as enum
+
+Types and statuses have their own abstract class as enum. Their values are fixed according to their id in database. This
+implementation choice forces to insert their data at the creation of the database.
+
+This is why they're not considered as data example and they're not in `database/dataExample.sql` file but directly
+in `database/dataBase.sql`
