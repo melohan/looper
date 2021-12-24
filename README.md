@@ -94,9 +94,9 @@ Because Unit tests are run with theses commands, you'll need to replace this pat
 
 `require_once(sprintf("%s/config/db.php", dirname($_SERVER['DOCUMENT_ROOT'])));`
 
-To this one: `require_once './config/db.php';` in  `app/database/DB.php`
+By this one: `require_once './config/db.php';` in  `app/database/DB.php`
 
-Execute these following commands:
+Execute these following commands from root directory:
 > The parent model is abstracte and tested through its children.
 
 ```shell
