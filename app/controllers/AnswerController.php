@@ -28,9 +28,10 @@ class AnswerController extends Controller
      */
     function question(int $id)
     {
+        $question = Question::get($id);
         $exercise = Answer::getExercisesBy(['question_id' => $id]);
         $answers = Answer::getAnswersBy(['question_id' => $id]);
-        return $this->view('answer.question', compact('answers', 'exercise'));
+        return $this->view('answer.question', compact('answers', 'exercise', 'question'));
     }
 
     /**
