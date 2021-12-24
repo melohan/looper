@@ -1,6 +1,10 @@
 # List of routes
 ---
 
+> Our URLs are defined as follows `/controller/action/:variable`
+>
+> If a page has two variables passed with GET, there is no strict rules. We just tried to keep it logical.
+
 ## Controller: Page
 
 | Path  |  Action  | Method | Description|
