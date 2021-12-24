@@ -6,6 +6,7 @@ use App\Models\Exercise;
 use App\models\ExerciseStatus;
 use App\Models\Question;
 use App\Models\Type;
+use mysql_xdevapi\Exception;
 
 class QuestionController extends Controller
 {
@@ -34,22 +35,26 @@ class QuestionController extends Controller
 
     /**
      * Update post from edit page
+     * Return 404 error page if question does not exist
      * @param $id
      */
     function update($id)
     {
         $question = Question::get($id);
-        if (!is_null($question) && (isset($_POST['field']['label']) || isset($_POST['typeId']))
-            && $question->getExercise()->getStatus()->getId() == ExerciseStatus::BUILDING
-        ) {
+
+        // Check posted value and exercise status
+        if (!is_null($question)
+            && (isset($_POST['field']['label']) || isset($_POST['typeId']))
+            && $question->getExercise()->getStatus()->getId() == ExerciseStatus::BUILDING) {
+
+            // If typeId is not updated, we retrieve its current value
             $typeId = isset($_POST['typeId']) ? $_POST['typeId'] : $question->getType()->getId();
             $text = isset($_POST['field']['label']) ? $_POST['field']['label'] : $question->getText();
+
             $question->getType()->setId($typeId);
             $question->setText($text);
             $question->edit();
-        }
-        // If id is changed in url
-        if (is_null($question)) {
+        } else {
             header('Location: /page/error/404');
         }
         header('Location: /question/fields/' . $question->getExercise()->getId());
@@ -65,6 +70,7 @@ class QuestionController extends Controller
             && Exercise::exist($_POST['exerciseId'])
             && isset($_POST['typeId'])
             && Type::exist($_POST['typeId'])) {
+
             $name = $_POST['name'] ?: "";
             $exerciseId = $_POST['exerciseId'];
             $typeId = $_POST['typeId'];
@@ -74,20 +80,23 @@ class QuestionController extends Controller
             $question->getExercise()->setId($exerciseId);
             $question->create();
             header('Location: /question/fields/' . $exerciseId);
+
         } else {
             header('Location: /');
         }
     }
 
     /**
-     * Delete question, this method is called by delete button and used by js file
+     * Delete the question whose exercise is being edited
+     * this method is called by delete button and used by js file
      */
     function delete()
     {
-        if (isset($_POST['id'])) {
-            $id = intval($_POST['id']);
-            $question = Question::get($id);
+        $question = Question::get($_POST['id']);
+        // If there is a post and if its exercise status is BUILDING
+        if (isset($_POST['id']) && !is_null($question) && $question->getExercise()->getStatus() == ExerciseStatus::BUILDING) {
             $question->remove();
         }
     }
+
 }
