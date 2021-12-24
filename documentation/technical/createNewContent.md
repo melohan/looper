@@ -5,6 +5,8 @@
 1) Create in `app/controllers/` ExampleController.php file.
 2) Create the controller class as follows
 
+> Controllers must end with "Controller.php".
+
 ```PHP
 <?php
 
@@ -25,6 +27,14 @@ class ExampleController extends Controller
     }
 }
 ```
+
+## Create your view
+
+Create at `resources/views/` your directory `example` your view `exampleOne`
+
+> In this project, to make it easier to fix bugs or apply changes, we named our subdirectories with the name of the controller.
+>
+> As for the name of the view, it is the name of the action.
 
 ## Create your URL
 
@@ -62,6 +72,10 @@ class yourModel extends Model
     public static function toObjectMany(array $params): array {// ..}
     
     // Your setters...
+    
+    // Your getters...
+    
+    /**  Object Specialized  Operations **/
 }
 
 ```
